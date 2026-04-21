@@ -69,6 +69,12 @@ Quicker to install — but the skill lives in the plugin cache, so edits to `ref
 
 **Claude Cowork:** Customize → Directory → Plugins → **+** → paste `cathrynlavery/diagram-design` → Sync, then install from the Personal list.
 
+**Codex:**
+```
+/plugin marketplace add cathrynlavery/diagram-design
+/plugin install diagram-design@diagram-design
+```
+
 ---
 
 ## Onboarding — make it look like *your* brand
