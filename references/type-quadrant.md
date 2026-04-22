@@ -4,7 +4,8 @@
 
 ## Layout conventions
 - 2×2 grid. Axis lines: 1px ink cross through the center.
-- Axis labels at the *ends* of each axis (e.g., `HIGH IMPACT →` on the right, `LOW IMPACT ←` on the left — Geist Mono eyebrow). Never label at the midpoint.
+- **Axis labels: Jobs-minimal.** One single word at each arrow tip — no glyphs baked into the label (no `↑` / `→` / `←` / `↓`), no parentheticals, no "HIGH / LOW" modifiers. Geist Mono 9px regular weight, tracked 0.18em, uppercase. Flank the arrow tips — never sit labels on top of the axis line. Shorten the arrow enough (~60–80px inside the viewBox edge) to leave breathing room for the labels beyond the tips.
+- Never label at the midpoint.
 - Items: small labeled dots (`r=4`) positioned in the quadrants. Labels 8–10px away; don't let labels cross axis lines.
 - Coral on the "do first" item (typically top-right).
 - Limit to ~12 items; cluster or split beyond that.
@@ -34,11 +35,13 @@ A **layout variant** of the standard quadrant — same house skin (warm paper, d
 
 | Move | Standard quadrant | Consultant special |
 |---|---|---|
-| Axis arrows | single-ended (→ HIGH EFFORT) | **double-ended** (← LOW ↔ HIGH →) |
+| Axis arrows | single-ended | **double-ended** — both axes have `marker-start` + `marker-end` |
 | Cell content | small dots with labels | **named scenario + 1–3 line description** |
-| Quadrant corner | short tag (e.g. DO FIRST) | **numbered tag + axis combination** (`01 · HIGH / LOW`) |
+| Quadrant corner | short tag (e.g. DO FIRST) | **numbered tag + axis combination** (`01 · DIMENSION-A / DIMENSION-B`) |
 | Focal accent | coral on one *item* | coral on one *quadrant* — tinted bg + coral stroke + coral corner tag |
 | Axes | 1px muted ink | **1.2px ink** (slightly heavier — the axes carry more of the figure) |
+
+Both variants use the same Jobs-minimal axis labels: one word at each arrow tip, no glyphs, no parentheticals. The only axis difference is that the consultant variant uses double-ended arrows instead of single-ended.
 
 Everything else — paper, dot pattern, typography, legend strip, 4px grid, complexity budget — is the house default. Don't invent new colors or fonts for this variant.
 
@@ -51,14 +54,18 @@ Everything else — paper, dot pattern, typography, legend strip, 4px grid, comp
 - **Non-focal cells**: `store` treatment (`ink @ 0.04` fill, `muted @ 0.28` stroke).
 - **Cell title**: Geist sans, 16px, weight 600, `ink`.
 - **Cell description**: Geist sans, 11px, `muted`, 1–3 lines, left-aligned inside the cell.
-- **Corner tag**: Geist Mono, 8px, uppercase, tracked `0.18em`, `muted` (or `accent` on focal).
-- **Axis labels**: two-line — `↑ DRIVER NAME` in Geist Mono 9px weight 600 uppercase tracked, `range` sublabel in Geist Mono 9px regular `muted`.
+- **Corner tag**: Geist Mono, 8px, uppercase, tracked `0.18em`, `muted` (or `accent` on focal). Format: `NN · DIMENSION-A / DIMENSION-B` — the two axis-dimension words must match the axis labels exactly.
+- **Axis labels**: Geist Mono 9px **regular weight** (not bold), tracked `0.18em`, uppercase, `ink`. **One word per tip.** No arrow glyphs in the label, no `HIGH / LOW` parentheticals, no multi-line sublabels. The word itself *is* the label. Position labels *beyond* the arrow tips (not on the axis line):
+  - Top tip: `text-anchor="middle"`, ~12px above the arrow tip
+  - Bottom tip: `text-anchor="middle"`, ~20px below the arrow tip
+  - Left tip: `text-anchor="end"`, ~12px left of the arrow tip, `dominant-baseline="middle"`
+  - Right tip: `text-anchor="start"`, ~12px right of the arrow tip, `dominant-baseline="middle"`
 
 ### Layout conventions
 
 - Four cells, equal size (240×160 or 280×180 are good defaults), arranged with a 40–60px gap from the axis cross.
 - Axis cross passes *between* the cells, not through them.
-- Arrow tips live ~20–40px outside the outermost cell edge; two-line axis labels beyond the tips.
+- Arrow tips live ~20–40px outside the outermost cell edge; single-word axis labels sit ~12px beyond each tip (see Axis labels above).
 - Exactly one focal cell. Picking none makes it a placeholder template; picking two erases the signal.
 - Keep the legend strip + horizontal rule at the bottom — same as the standard quadrant. Legend swatches should show both "headline bet" (coral) and "candidate future" (neutral).
 
@@ -70,3 +77,5 @@ Everything else — paper, dot pattern, typography, legend strip, 4px grid, comp
 - Coral on more than one cell — same focal rule as everywhere else in the skill.
 - 3×3 or 2×3 grids — those are different diagrams, not this variant.
 - Positioning dots *inside* the cells — if position matters, use the standard quadrant.
+- Bolded axis labels, arrow glyphs in the text (`↑ DRIVER`), or "HIGH / LOW" parentheticals — all forbidden. Jobs-minimal is non-negotiable on this variant.
+- Corner tags that disagree with the axis labels (e.g. axis says `REMOTE / IN-PERSON` but the tag reads `HIGH REMOTE / LOW AI`). Reader parses this as a bug in three seconds.
