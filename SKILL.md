@@ -20,7 +20,7 @@ Thirteen diagram types. One shared design system, complexity budget, and taste g
 
 Open [`references/style-guide.md`](references/style-guide.md) and check the default tokens. If they're still the shipped defaults (paper `#faf7f2`, ink `#1c1917`, accent `#b5523a` rust), **pause and ask the user**:
 
-> *"This is your first diagram in this project. The style guide is still at the default (neutral stone + rust). Do you want to customize it to match your brand first? Options: (a) run onboarding — I'll pull colors and fonts from your website, (b) paste your tokens manually, (c) proceed with the default for now."*
+> *"This is your first Schematic in this project. The style guide is still at the default (neutral stone + rust). Do you want to customize it to match your brand first? Options: (a) run onboarding — I'll pull colors and fonts from your website, (b) paste your tokens manually, (c) proceed with the default for now."*
 
 Then branch:
 - **(a)** → follow [`references/onboarding.md`](references/onboarding.md) to fetch the site, extract palette + fonts, propose a diff, and write `style-guide.md`.
@@ -39,11 +39,11 @@ Don't silently ship default-skinned diagrams into a branded project — that's t
 
 From `.impeccable.md`: *"Confident restraint. Earn every element. One color accent, two families, a small spacing vocabulary. If removing it wouldn't hurt the page, remove it."*
 
-Applied to diagrams:
+Applied to schematics:
 - Every node represents a distinct idea. Two nodes that always travel together are one node.
 - Every connection carries information. If the relationship is obvious from layout, remove the line.
 - Coral is **editorial, not a flag.** 1–2 focal nodes per diagram. Using it on 5 nodes erases the signal.
-- The diagram isn't done when everything is added. It's done when nothing can be removed.
+- The schematic isn't done when everything is added. It's done when nothing can be removed.
 
 **Target density: 4/10.** Enough to be technically complete. Not so dense it needs a guide. Above 9 nodes, it's probably two diagrams.
 
@@ -94,7 +94,7 @@ Rules of thumb:
 
 ## 4. Universal Anti-patterns
 
-These mark "AI slop" diagrams of any type:
+These mark "AI slop" schematics of any type:
 
 | Anti-pattern | Why it fails |
 |---|---|
@@ -115,7 +115,7 @@ Type-specific anti-patterns live in each `references/type-*.md`.
 
 ## 5. Design System
 
-**The design system is skinnable.** All colors, typography, and tokens live in a single source of truth — [`references/style-guide.md`](references/style-guide.md). This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is littlemight.com (warm paper, ink, coral); to apply your own brand, either edit `style-guide.md` directly or run the URL-based flow described in [`references/onboarding.md`](references/onboarding.md).
+**The design system is skinnable.** All colors, typography, and tokens live in a single source of truth — [`references/style-guide.md`](references/style-guide.md). This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is a cool editorial palette (white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted, silver hairlines); to apply your own brand, either edit `style-guide.md` directly or run the URL-based flow described in [`references/onboarding.md`](references/onboarding.md).
 
 > When specs below or in type references mention "ink", "accent", "muted", etc., look up the current hex value in `style-guide.md`.
 
@@ -169,35 +169,45 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 
 ### Background
 
+**Default: clean paper, no dot pattern.** Single `<rect>` filled with `paper`. Don't wrap the diagram in a secondary container background — the diagram sits directly on the page.
+
+```svg
+<rect width="100%" height="100%" fill="#f5f5f5"/>
+```
+
+**Optional: dotted paper variant.** When a long-form editorial diagram benefits from textured ground (essays, hero diagrams on a dedicated page), opt in by adding the `dots` pattern and a second rect:
+
 ```svg
 <defs>
   <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
-    <circle cx="1" cy="1" r="0.9" fill="rgba(11,13,11,0.10)"/>
+    <circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/>
   </pattern>
 </defs>
-<rect width="100%" height="100%" fill="#f5f4ed"/>
+<rect width="100%" height="100%" fill="#f5f5f5"/>
 <rect width="100%" height="100%" fill="url(#dots)" opacity="0.6"/>
 ```
+
+Don't use the dot pattern when the diagram sits inside a product page, slide, or card — the texture compounds with surrounding chrome and reads as noise.
 
 ### Arrow markers (define all three, always)
 
 ```svg
 <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#52534e"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/>
 </marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#f7591f"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/>
 </marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#1a70c7"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
 </marker>
 ```
 
 | Arrow | Stroke | When |
 |---|---|---|
-| Default | muted `#52534e` | Internal, generic |
-| Accent | coral `#f7591f` | Primary / highlighted / headline |
-| Link-blue | `#1a70c7` | HTTP/API calls, external systems |
+| Default | muted `#4f5d75` | Internal, generic |
+| Accent | coral `#eb6c36` | Primary / highlighted / headline |
+| Link-blue | `#2e5aa8` | HTTP/API calls, external systems |
 | Dashed | `stroke-dasharray="5,4"` + any color | Optional, passive, return, async |
 
 **Draw arrows before boxes** so z-order puts lines behind nodes.
@@ -206,7 +216,7 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 
 ```svg
 <!-- 1. Opaque paper mask — prevents arrows bleeding through transparent fills -->
-<rect x="X" y="Y" width="W" height="H" rx="6" fill="#f5f4ed"/>
+<rect x="X" y="Y" width="W" height="H" rx="6" fill="#f5f5f5"/>
 <!-- 2. Styled box -->
 <rect x="X" y="Y" width="W" height="H" rx="6" fill="FILL" stroke="STROKE" stroke-width="1"/>
 <!-- 3. Rectangular type tag (rx=2, NOT a pill) -->
@@ -214,10 +224,10 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 <text x="X+22" y="Y+15" fill="STROKE@0.8" font-size="7" font-family="'Geist Mono', monospace"
       text-anchor="middle" letter-spacing="0.08em">API</text>
 <!-- 4. Node name (Geist sans — human-readable) -->
-<text x="CX" y="CY+2" fill="#0b0d0b" font-size="12" font-weight="600"
+<text x="CX" y="CY+2" fill="#2d3142" font-size="12" font-weight="600"
       font-family="'Geist', sans-serif" text-anchor="middle">Node Name</text>
 <!-- 5. Technical sublabel (Geist Mono) -->
-<text x="CX" y="CY+18" fill="#52534e" font-size="9"
+<text x="CX" y="CY+18" fill="#4f5d75" font-size="9"
       font-family="'Geist Mono', monospace" text-anchor="middle">tech:port</text>
 ```
 
@@ -226,8 +236,8 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 Every arrow label needs an opaque rect behind it. Without one it bleeds through the line.
 
 ```svg
-<rect x="MID_X-18" y="ARROW_Y-12" width="36" height="12" rx="2" fill="#f5f4ed"/>
-<text x="MID_X" y="ARROW_Y-3" fill="#65655c" font-size="8"
+<rect x="MID_X-18" y="ARROW_Y-12" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="MID_X" y="ARROW_Y-3" fill="#7a8399" font-size="8"
       font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">WRITE</text>
 ```
 
@@ -239,8 +249,8 @@ Rules: ≤14 characters, all-caps, centered on segment midpoint, 8–10px above 
 
 ```svg
 <line x1="30" y1="LEGEND_Y-8" x2="VIEWBOX_W-30" y2="LEGEND_Y-8"
-      stroke="rgba(11,13,11,0.10)" stroke-width="0.8"/>
-<text x="30" y="LEGEND_Y+8" fill="#52534e" font-size="8" font-family="'Geist Mono', monospace"
+      stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+<text x="30" y="LEGEND_Y+8" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace"
       letter-spacing="0.14em">LEGEND</text>
 <!-- Items — horizontal row, ~160px apart -->
 ```
@@ -291,7 +301,7 @@ If you exceed, split into two diagrams (overview + detail).
 ### Page layout
 
 1. **Header** — eyebrow (Geist Mono), title (Instrument Serif), optional subtitle (Geist muted).
-2. **Diagram container** — `#efeee5` bg, 1px `rgba(11,13,11,0.12)` border, 8px radius, `overflow-x: auto`.
+2. **Diagram container** — default: **clean, borderless**, no background — the SVG sits directly on the page paper. Optional *framed* variant (for card-heavy layouts or hero placements): `paper-2` bg + 1px `rule` border + 8px radius + `1.5rem` padding + `overflow-x: auto`.
 3. **Summary cards** — 2–3 col grid with *varied* widths (e.g., `1.1fr 1fr 0.9fr`).
 4. **Footer** — colophon in Geist Mono, muted, hairline top border.
 
@@ -314,7 +324,7 @@ Don't use 3 identical generic cards. Vary the treatment:
 
 Rules:
 - `background: #ffffff` (not paper — slight lift without shadow)
-- `border: 1px solid rgba(11,13,11,0.12)`
+- `border: 1px solid rgba(45,49,66,0.12)`
 - `border-radius: 6px`, `padding: 1.25rem`
 - **No `box-shadow`**
 - Card dots: 7px, `border-radius: 50%` — ink / muted / coral / link / soft variants
@@ -343,7 +353,7 @@ Run before producing any diagram.
 
 **Technical:**
 - [ ] Arrows drawn before boxes?
-- [ ] Every arrow label has an opaque `fill="#f5f4ed"` rect behind it?
+- [ ] Every arrow label has an opaque `fill="#f5f5f5"` rect behind it?
 - [ ] Legend is a horizontal bottom strip, not floating?
 - [ ] No vertical `writing-mode` text?
 - [ ] `viewBox` expanded for the legend strip (~60px)?
@@ -367,6 +377,7 @@ Every diagram ships in three variants (see `assets/`):
 | **Minimal light** (default) | `template.html`, `example-<type>.html` | Screenshot-ready. Diagram + title. Warm paper. |
 | **Minimal dark** | `template-dark.html`, `example-<type>-dark.html` | Dark mode sites, slides, high-contrast posts. |
 | **Full editorial** | `template-full.html`, `example-<type>-full.html` | Long-form posts where the diagram is the hero. |
+| **Consultant special** (quadrant only) | `example-quadrant-consultant.html` | BCG/McKinsey-style 2×2 scenario matrix. Clinical sans-serif, white bg, bold blue double-ended axes, named scenario cells. See [type-quadrant.md](references/type-quadrant.md#consultant-special-2x2-scenario-matrix). |
 
 **Sketchy variant** (optional, applied to any of the above) — see [primitive-sketchy.md](references/primitive-sketchy.md). SVG turbulence filter wobbles strokes for a hand-drawn feel. Good for essays, not for technical docs.
 

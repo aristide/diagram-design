@@ -20,13 +20,13 @@
 ## Lifeline primitive
 ```svg
 <line x1="CX" y1="TOP" x2="CX" y2="BOTTOM"
-      stroke="rgba(11,13,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
 ```
 
 ## Activation bar primitive
 ```svg
 <rect x="CX-4" y="TOP" width="8" height="H"
-      fill="rgba(11,13,11,0.06)" stroke="#52534e" stroke-width="0.8"/>
+      fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8"/>
 ```
 
 ## Examples

@@ -5,11 +5,11 @@
 ## Layout conventions
 - **Prefer 2 or 3 circles.** Avoid 4+ (unreadable — use a matrix instead).
 - Circle stroke: 1px hairline, color per-set (ink, muted, soft).
-- Circle fill: very low-opacity tint — `rgba(11,13,11,0.04)` for ink set, `rgba(82,83,78,0.05)` for muted. Tints compound naturally in overlap regions.
+- Circle fill: very low-opacity tint — `rgba(45,49,66,0.04)` for ink set, `rgba(79,93,117,0.05)` for muted. Tints compound naturally in overlap regions.
 - Radii: equal when sets are comparable in size; proportional when sets are meaningfully different. Don't fake equal sizes for aesthetics.
 - **Set labels** placed outside the circle, NEVER crossing the stroke. Geist 12–14px 600 for the set name, optional Geist Mono 9px sublabel.
 - **Intersection labels** placed inside the overlap region, Geist 12px 600, centered. For small overlaps, use a leader line to a label in clear space.
-- **Coral accent** on the ONE focal intersection — the "sweet spot". Either coral label stroke OR clipPath-bounded coral fill tint (`rgba(247,89,31,0.10)`).
+- **Coral accent** on the ONE focal intersection — the "sweet spot". Either coral label stroke OR clipPath-bounded coral fill tint (`rgba(235,108,54,0.10)`).
 - Circle centers and radii divisible by 4.
 
 ## Anti-patterns

@@ -1,8 +1,8 @@
 # Style Guide
 
-**The single source of truth for colors, typography, and tokens.** Every diagram draws from this — not from hex values inlined in other reference files. If you want to change the visual skin of diagram-design, change this file.
+**The single source of truth for colors, typography, and tokens.** Every diagram draws from this — not from hex values inlined in other reference files. If you want to change the visual skin of Schematic, change this file.
 
-Default skin is a neutral editorial palette — warm stone paper, deep charcoal ink, rust accent. It's designed to look good out of the box for any open-source user without matching any specific brand. Swap these values (or run [`onboarding.md`](onboarding.md)) and every new diagram inherits the new skin without touching any type-specific logic.
+Default skin is a cool editorial palette — white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted. It's designed to look good out of the box; swap these values (or run [`onboarding.md`](onboarding.md)) and every new diagram inherits the new skin without touching any type-specific logic.
 
 To generate your own from a website URL, see [`onboarding.md`](onboarding.md).
 
@@ -16,18 +16,20 @@ Every token is referred to by **semantic role**, not by its hex value. Type refe
 
 | Role | Purpose | Default (light) | Default (dark) |
 |---|---|---|---|
-| `paper` | Page background, default node fill | `#faf7f2` | `#1c1917` |
-| `paper-2` | Diagram container bg, secondary fill | `#f2ede4` | `#292524` |
-| `ink` | Primary text, primary stroke | `#1c1917` | `#faf7f2` |
-| `muted` | Secondary text, default arrow stroke | `#57534e` | `#a8a29e` |
-| `soft` | Sublabels, boundary labels | `#78716c` | `#8e8680` |
-| `rule` | Hairline borders | `rgba(28,25,23,0.12)` | `rgba(250,247,242,0.12)` |
-| `rule-solid` | Stronger borders, baselines | `rgba(120,113,108,0.25)` | `rgba(168,162,158,0.25)` |
-| `accent` | Focal / 1–2 max per diagram | `#b5523a` | `#d6724a` |
-| `accent-tint` | Fill for accent-bordered boxes | `rgba(181,82,58,0.08)` | `rgba(214,114,74,0.10)` |
-| `link` | HTTP/API calls, external arrows | `#2563eb` | `#60a5fa` |
+| `paper` | Page background, default node fill | `#f5f5f5` (white-smoke) | `#2d3142` (jet-black) |
+| `paper-2` | Diagram container bg, secondary fill | `#ececec` | `#393e53` |
+| `ink` | Primary text, primary stroke | `#2d3142` (jet-black) | `#f5f5f5` (white-smoke) |
+| `muted` | Secondary text, default arrow stroke | `#4f5d75` (blue-slate) | `#bfc0c0` (silver) |
+| `soft` | Sublabels, boundary labels | `#7a8399` | `#8e98ac` |
+| `rule` | Hairline borders | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
+| `rule-solid` | Stronger borders, baselines | `#bfc0c0` (silver) | `rgba(191,192,192,0.25)` |
+| `accent` | Focal / 1–2 max per diagram | `#eb6c36` (atomic-tangerine) | `#f08a59` |
+| `accent-tint` | Fill for accent-bordered boxes | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.10)` |
+| `link` | HTTP/API calls, external arrows | `#2e5aa8` | `#6a95d8` |
 
-> **Note:** The pre-baked example HTML files in `assets/` were built under an earlier skin. Regenerating them against the current `style-guide.md` is a v1.1 task. New diagrams the skill produces will use the tokens above.
+> **Brand palette source:** this skin maps to a five-color brand palette — `jet-black #2d3142`, `silver #bfc0c0`, `white-smoke #f5f5f5`, `atomic-tangerine #eb6c36`, `blue-slate #4f5d75`. The `soft`, `rule`, and `link` tokens are derived (lighter slate, ink-at-opacity, and a saturated variant in the blue-slate hue family) to cover roles the brand palette doesn't name directly.
+
+> **Note:** The pre-baked example HTML files in `assets/` were built under an earlier skin. Regenerating them against the current `style-guide.md` is a v5.1 task. New diagrams the skill produces will use the tokens above.
 
 ### Inversion rule (light → dark)
 
@@ -101,4 +103,5 @@ Three options:
 - **No rainbow palette**: if your brand ships 8 colors, pick 3 (paper, ink, accent). The rest become `muted` variants.
 - **Serif + sans + mono**: three families, not more. If brand typography is all sans, keep Instrument Serif for `title` and `callout` anyway — the contrast is load-bearing.
 - **Paper is warm-neutral, not pure white**: pure white turns the design sterile. Pick a cream, bone, or light grey with a hint of warmth.
-- **Dot pattern survives**: the 22×22 dot pattern on the diagram background needs to sit at ~10% opacity of `ink` on `paper` — verify it's visible but quiet after a skin change.
+- **Dot pattern is optional, not default**: the 22×22 dot pattern is an opt-in "dotted paper" variant (good for long-form editorial hero diagrams). The default background is a clean `paper` fill, no pattern. When the pattern is enabled, it should sit at ~10% opacity of `ink` on `paper` — visible but quiet.
+- **Container is clean by default**: the diagram sits directly on the page paper, no secondary container background or border. A framed variant (`paper-2` bg + `rule` border + 8px radius + padding) is available as an opt-in for card-heavy layouts, but don't reach for it by default — the extra chrome fights the figure.

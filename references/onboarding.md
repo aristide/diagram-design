@@ -30,7 +30,7 @@ future diagrams use your tokens
 
 Ask the skill:
 
-> *"Onboard diagram-design to my site — `https://example.com`"*
+> *"Onboard Schematic to my site — `https://example.com`"*
 
 Or run it with an explicit URL and the skill reads this file and executes the steps below.
 
@@ -68,7 +68,7 @@ Read the rendered `font-family` stack of:
 - `<body>` → `node-name` family  
 - `<code>`, `<pre>`, or any mono-styled element → `sublabel` family
 
-If the site has only one family, keep the diagram-design defaults for the missing roles (Instrument Serif for title, Geist Mono for mono). Don't force-pick a mono font that isn't on the site.
+If the site has only one family, keep the schematic defaults for the missing roles (Instrument Serif for title, Geist Mono for mono). Don't force-pick a mono font that isn't on the site.
 
 ---
 
@@ -92,7 +92,7 @@ Before writing, validate:
 
 - **AA contrast**: `ink` on `paper` ≥ 4.5:1. `muted` on `paper` ≥ 4.5:1 for body text.
 - **Accent is the most saturated color**: not muted-ish, not near-grey.
-- **paper ≠ pure white**: if the site uses `#ffffff`, fall back to `#fafaf7` to preserve diagram-design's warm-neutral feel — or ask the user to confirm pure-white is intentional.
+- **paper ≠ pure white**: if the site uses `#ffffff`, fall back to `#fafaf7` to preserve Schematic's warm-neutral feel — or ask the user to confirm pure-white is intentional.
 
 If any check fails, propose an adjusted value and explain why.
 
@@ -127,8 +127,8 @@ After onboarding, the user should:
 
 ## When onboarding fails
 
-- **Site uses webfonts you can't replicate** (custom-hosted, paid): keep the diagram-design defaults for typography and skin only the colors.
-- **Brand has 6+ colors** and you can't identify a clear hierarchy: pick one as `accent`, demote the rest to `muted` variants or ignore them. The diagram grammar only uses 5–7 roles.
+- **Site uses webfonts you can't replicate** (custom-hosted, paid): keep the schematic defaults for typography and skin only the colors.
+- **Brand has 6+ colors** and you can't identify a clear hierarchy: pick one as `accent`, demote the rest to `muted` variants or ignore them. The schematic grammar only uses 5–7 roles.
 - **Site is dark-mode first**: flip the inversion — treat their dark paper as the default `paper`, and generate a light variant via inversion.
 - **Homepage is all imagery, no text**: ask for a blog or docs URL instead — text-heavy pages expose the type hierarchy.
 
@@ -136,4 +136,4 @@ After onboarding, the user should:
 
 ## Future: per-project skins
 
-If the user wants multiple skins (one per project), duplicate `style-guide.md` as `style-guides/<project>.md` and add a header comment pointing the build to the active one. That's a v1.1 feature — for now, one skin per skill install.
+If the user wants multiple skins (one per project), duplicate `style-guide.md` as `style-guides/<project>.md` and add a header comment pointing the build to the active one. That's a v5.2 feature — for now, one skin per skill install.

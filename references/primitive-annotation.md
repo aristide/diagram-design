@@ -6,13 +6,13 @@ Use for editorial asides — the "italic pointer" that marks a detail without co
 
 ```svg
 <!-- 1. Italic Instrument Serif text -->
-<text x="904" y="36" fill="#0b0d0b" font-size="14" font-style="italic"
+<text x="904" y="36" fill="#2d3142" font-size="14" font-style="italic"
       font-family="'Instrument Serif', serif" text-anchor="end">no imports, no configuration</text>
 <!-- 2. Dashed Bézier leader -->
 <path d="M 820 44 Q 700 84 520 216" fill="none"
-      stroke="rgba(11,13,11,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      stroke="rgba(45,49,66,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
 <!-- 3. Landing dot -->
-<circle cx="520" cy="216" r="2" fill="#0b0d0b"/>
+<circle cx="520" cy="216" r="2" fill="#2d3142"/>
 ```
 
 ## Rules
@@ -25,9 +25,9 @@ Use for editorial asides — the "italic pointer" that marks a detail without co
 
 | Intent | Text | Leader |
 |---|---|---|
-| Neutral aside | ink `#0b0d0b` | `rgba(11,13,11,0.40)` |
-| Focal / accent | coral `#f7591f` | `rgba(247,89,31,0.50)` |
-| Tertiary (muted) | muted `#52534e` | `rgba(11,13,11,0.30)` |
+| Neutral aside | ink `#2d3142` | `rgba(45,49,66,0.40)` |
+| Focal / accent | coral `#eb6c36` | `rgba(235,108,54,0.50)` |
+| Tertiary (muted) | muted `#4f5d75` | `rgba(45,49,66,0.30)` |
 
 ## Anti-patterns
 - Solid arrow leader (reads as a flow arrow).
