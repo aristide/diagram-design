@@ -82,8 +82,7 @@ Quicker to install — but the skill lives in the plugin cache, so edits to `ref
 
 **Codex:**
 ```
-/plugin marketplace add cathrynlavery/diagram-design
-/plugin install diagram-design@diagram-design
+npx skills add https://github.com/cathrynlavery/diagram-design --skill diagram-design
 ```
 
 ---
