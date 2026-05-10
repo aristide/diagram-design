@@ -1,16 +1,16 @@
 ---
 name: diagram-design
-description: Create technical and product diagrams — architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant, nested, tree, layer stack, venn, pyramid — as standalone HTML files with inline SVG. Ships with a neutral editorial skin and a first-run gate that prompts users to customize the style guide (colors, fonts) from their own website before generating. Includes annotation-callout primitive and optional sketchy variant.
+description: Create technical and product diagrams — architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant, nested, tree, layer stack, venn, pyramid, radar / spider — as standalone HTML files with inline SVG. Ships with a neutral editorial skin and a first-run gate that prompts users to customize the style guide (colors, fonts) from their own website before generating. Includes annotation-callout primitive and optional sketchy variant.
 license: MIT
 metadata:
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Diagram Design
 
 Create visual diagrams as self-contained HTML files with inline SVG and CSS, following an opinionated editorial design system.
 
-Thirteen diagram types. One shared design system, complexity budget, and taste gate. Type-specific conventions live in `references/` and are loaded only when you pick a type.
+Fourteen diagram types. One shared design system, complexity budget, and taste gate. Type-specific conventions live in `references/` and are loaded only when you pick a type.
 
 ---
 
@@ -77,6 +77,7 @@ Before drawing, ask: *Would the reader learn more from this than from a well-wri
 | Events positioned in time | **Timeline** | [type-timeline.md](references/type-timeline.md) |
 | Cross-functional process with handoffs | **Swimlane** | [type-swimlane.md](references/type-swimlane.md) |
 | Two-axis positioning / prioritization | **Quadrant** | [type-quadrant.md](references/type-quadrant.md) |
+| Multiple entities scored across 3–5 quantitative criteria | **Radar / Spider** | [type-radar.md](references/type-radar.md) |
 | Hierarchy through containment / scope | **Nested** | [type-nested.md](references/type-nested.md) |
 | Parent → children relationships | **Tree** | [type-tree.md](references/type-tree.md) |
 | Stacked abstraction levels | **Layer stack** | [type-layers.md](references/type-layers.md) |
@@ -294,6 +295,9 @@ Quick check: if a coordinate ends in 1, 2, 3, 5, 6, 7, 9 — fix it.
 | Max layers (layer stack) | 6 |
 | Max circles (venn) | 3 |
 | Max layers (pyramid) | 6 |
+| Max radar axes | 5 |
+| Max radar series | 5 |
+| Max focal radar series | 1 |
 | Max annotation callouts | 2 |
 
 If you exceed, split into two diagrams (overview + detail).

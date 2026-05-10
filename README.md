@@ -4,7 +4,7 @@
 
 ![Content site architecture](docs/screenshots/architecture.png)
 
-14 types. One Claude Code skill. Your brand in 60 seconds — the skill reads your website and maps colors + fonts to every diagram.
+15 types. One Claude Code skill. Your brand in 60 seconds — the skill reads your website and maps colors + fonts to every diagram.
 
 No Figma. No generic rounded boxes. No 30-minute color-picking sessions.
 
@@ -22,7 +22,7 @@ So I built a Claude Code skill for it. Fourteen types, editorial quality, matche
 
 ## What it makes
 
-All 14 diagrams ship in three variants: minimal light, minimal dark, and full-editorial. Open any of them directly in a browser — no build step, no JS, no external images.
+All 15 diagrams ship in three variants: minimal light, minimal dark, and full-editorial. Open any of them directly in a browser — no build step, no JS, no external images.
 
 <table>
 <tr>
@@ -48,7 +48,7 @@ All 14 diagrams ship in three variants: minimal light, minimal dark, and full-ed
 <tr>
   <td align="center"><img src="docs/screenshots/pyramid.png" alt="Pyramid"><br><b>Pyramid / funnel</b><br><sub>Ranked hierarchy or drop-off</sub></td>
   <td align="center"><img src="docs/screenshots/quadrant-consultant.png" alt="Consultant 2×2"><br><b>Consultant 2×2</b><br><sub>Scenario matrix · named cells</sub></td>
-  <td align="center">&nbsp;</td>
+  <td align="center"><img src="docs/screenshots/radar.png" alt="Radar / Spider"><br><b>Radar / Spider</b><br><sub>Multi-axis capability comparison</sub></td>
 </tr>
 </table>
 
