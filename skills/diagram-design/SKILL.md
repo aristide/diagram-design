@@ -3,7 +3,7 @@ name: diagram-design
 description: Create technical and product diagrams — architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant, nested, tree, layer stack, venn, pyramid, radar / spider — as standalone HTML files with inline SVG. Ships with a neutral editorial skin and a first-run gate that prompts users to customize the style guide (colors, fonts) from their own website before generating. Includes annotation-callout primitive and optional sketchy variant.
 license: MIT
 metadata:
-  version: "1.2"
+  version: "1.3"
 ---
 
 # Diagram Design
@@ -167,6 +167,7 @@ Type-specific anti-patterns live in each `references/type-*.md`.
 Universal building blocks. Type-specialized primitives (lifeline, activation bar, region) live in the relevant `references/type-*.md`. Optional primitives:
 - Editorial callouts → [primitive-annotation.md](references/primitive-annotation.md)
 - Hand-drawn variant → [primitive-sketchy.md](references/primitive-sketchy.md)
+- Icon set (laptop, server, DB, K8s, Docker, AWS, …) → [primitive-icons.md](references/primitive-icons.md). Browse the gallery at [`assets/icons.html`](../assets/icons.html).
 
 ### Background
 
