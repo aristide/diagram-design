@@ -3,7 +3,7 @@ name: diagram-design
 description: Create technical and product diagrams — architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant, nested, tree, layer stack, venn, pyramid — as standalone HTML files with inline SVG. Ships with a neutral editorial skin and a first-run gate that prompts users to customize the style guide (colors, fonts) from their own website before generating. Includes annotation-callout primitive and optional sketchy variant.
 license: MIT
 metadata:
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Diagram Design
@@ -398,3 +398,7 @@ Always produce a single self-contained `.html` file:
 - No JavaScript required
 
 Renders correctly in any modern browser.
+
+### Exporting to PNG / SVG
+
+When the user asks to export, save, rasterize, or convert a generated diagram to `.png` or `.svg`, load [`references/export.md`](references/export.md) and follow the procedure there. Both formats deliver the diagram only (the `<svg>` node) — editorial wrappers like cards and headers are dropped by design. Export is **manual** — never produce export files unprompted.

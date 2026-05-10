@@ -1,9 +1,9 @@
 {
   "name": "diagram-design",
   "description": "Editorial-quality technical and product diagrams — 13 types rendered as standalone HTML with inline SVG, skinnable to match your brand",
-  "version": "1.0.0",
-  "homepage": "https://github.com/cathrynlavery/diagram-design",
-  "repository": "https://github.com/cathrynlavery/diagram-design",
+  "version": "1.1.0",
+  "homepage": "https://github.com/aristide/diagram-design",
+  "repository": "https://github.com/aristide/diagram-design",
   "license": "MIT",
   "keywords": [
     "diagrams",

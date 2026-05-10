@@ -160,6 +160,22 @@ cp assets/template-full.html my-diagram.html   # editorial with summary cards
 
 ---
 
+## Export to PNG / SVG
+
+Diagrams ship as self-contained HTML, but you can export the diagram itself for Figma, slides, or social cards. Just ask:
+
+```
+"Export this diagram as SVG and PNG."
+"Save my-diagram.html as PNG."
+```
+
+- **SVG** — extracts the `<svg>` node and injects Google Fonts so it renders standalone in browsers, Figma, and Illustrator.
+- **PNG** — rasterizes the diagram via Playwright at 2× by default. One-time setup: `pip install playwright && playwright install chromium`.
+
+Both formats are diagram-only — editorial cards and headers from `-full` variants aren't included. For a screenshot of the full editorial layout, use your browser's print-to-PDF or full-page screenshot. See [`skills/diagram-design/references/export.md`](skills/diagram-design/references/export.md) for the full procedure.
+
+---
+
 ## Architecture
 
 Progressive disclosure. `SKILL.md` is a lean index — it tells Claude how to pick a type and where to look for detail. Every type lives in its own reference file, loaded only when relevant.

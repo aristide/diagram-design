@@ -1,13 +1,13 @@
 {
   "name": "diagram-design",
   "description": "Editorial-quality technical and product diagrams - 13 types rendered as standalone HTML with inline SVG, skinnable to match your brand",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
-    "name": "Cathryn Lavery",
-    "url": "https://github.com/cathrynlavery"
+    "name": "Aristide",
+    "url": "https://github.com/aristide"
   },
-  "homepage": "https://github.com/cathrynlavery/diagram-design",
-  "repository": "https://github.com/cathrynlavery/diagram-design",
+  "homepage": "https://github.com/aristide/diagram-design",
+  "repository": "https://github.com/aristide/diagram-design",
   "license": "MIT",
   "keywords": [
     "diagrams",
@@ -28,7 +28,7 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/cathrynlavery/diagram-design",
+    "websiteURL": "https://github.com/aristide/diagram-design",
     "defaultPrompt": [
       "Make an architecture diagram of my app.",
       "Create a flowchart for this decision process.",
