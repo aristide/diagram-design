@@ -31,6 +31,22 @@ Flip the vertical signs for right+up. Use a plain `<line>` only when endpoints s
 
 Reserve left/right ports for connections that travel primarily horizontally. Entering a node from the side on a mainly-vertical path looks like the arrow punctures the node face rather than arriving from above or below.
 
+**Zone label margin.** Leave ≥16px between the bottom of the zone eyebrow label and the top of the first enclosed node. Size the zone rect tall enough to contain this header gap (zone `y` = node_top − 32; label mask `y` = zone_y + 4).
+
+## Crossing arrows — bridge / hop
+
+When two orthogonal arrows must cross, add a small arc (hop/bridge) on the **less important** arrow at the crossing point. The more important arrow is drawn uninterrupted.
+
+```svg
+<!-- Horizontal hop over a vertical crossing at x=cx, on a line at y -->
+<path d="M x1,y H cx-8 a 8,8 0 0,1 16,0 H x2"
+      fill="none" stroke="…" stroke-width="1.2" marker-end="url(#arrow)"/>
+```
+
+`a 8,8 0 0,1 16,0` is an SVG arc: rx=ry=8, large-arc=0, sweep=1 (curves visually upward), advancing 16px right — creating an 8px-radius semicircular bump over the crossing. For a vertical hop over a horizontal, use `a 8,8 0 0,0 0,16` on the vertical path.
+
+Decide which arrow to bridge: bridge the one that is less semantically important (passive, secondary, write-back), or the one with lighter stroke weight (dashed, muted). Never bridge both.
+
 ## Zone grouping
 
 Group 2+ nodes that serve the same tier or trust boundary with a zone rect — drawn **before** arrows and nodes (z-order: bg → zones → arrows → nodes):
