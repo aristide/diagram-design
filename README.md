@@ -162,7 +162,15 @@ cp assets/template-full.html my-diagram.html   # editorial with summary cards
 
 ## Export to PNG / SVG
 
-Diagrams ship as self-contained HTML, but you can export the diagram itself for Figma, slides, or social cards. Just ask:
+Diagrams ship as self-contained HTML, but you can export the diagram itself for Figma, slides, or social cards. Use the slash command:
+
+```
+/diagram-design:export path/to/diagram.html
+/diagram-design:export path/to/diagram.html --svg-only
+/diagram-design:export path/to/diagram.html --png-only --scale=3
+```
+
+Or just ask in natural language:
 
 ```
 "Export this diagram as SVG and PNG."

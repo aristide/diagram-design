@@ -4,13 +4,17 @@ Convert a generated diagram HTML file into a portable `.svg` and/or `.png` next 
 
 ## Trigger
 
-Load this file when the user asks to export, save, rasterize, convert, or download a diagram in `.svg` or `.png` form. Typical phrasings:
+Load this file when:
 
-- "export this as PNG"
-- "save as SVG"
-- "give me a PNG of that diagram"
-- "rasterize it"
-- "convert to png and svg"
+- The user invokes `/diagram-design:export <html-file>` (the plugin's slash command — defined in `commands/export.md` at the repo root).
+- The user asks in natural language to export, save, rasterize, convert, or download a diagram in `.svg` or `.png` form. Typical phrasings:
+  - "export this as PNG"
+  - "save as SVG"
+  - "give me a PNG of that diagram"
+  - "rasterize it"
+  - "convert to png and svg"
+
+The slash command is a thin wrapper that delegates here — both paths run the same procedure below.
 
 ## Scope
 
