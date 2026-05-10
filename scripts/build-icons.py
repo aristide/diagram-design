@@ -109,6 +109,21 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
         ("postgres",   "simple", "postgresql",         "PostgreSQL."),
         ("redis",      "simple", "redis",              "Redis."),
         ("nginx",      "simple", "nginx",              "Nginx."),
+        ("gitea",      "simple", "gitea",              "Gitea self-hosted git."),
+        ("keycloak",   "simple", "keycloak",           "Keycloak identity / SSO."),
+        ("minio",      "simple", "minio",              "MinIO S3-compatible object storage."),
+    ],
+    "Data stack": [
+        ("nifi",      "simple", "apachenifi",      "Apache NiFi data flow."),
+        ("airflow",   "simple", "apacheairflow",   "Apache Airflow scheduler / DAG runner."),
+        ("trino",     "simple", "trino",           "Trino distributed SQL query engine."),
+        ("superset",  "simple", "apachesuperset",  "Apache Superset BI / dashboards."),
+        ("jupyter",   "simple", "jupyter",         "Jupyter / JupyterLab notebooks."),
+    ],
+    "Language": [
+        ("python", "simple", "python", "Python."),
+        ("r",      "simple", "r",      "R statistical language."),
+        ("sql",    "tabler", "sql",    "SQL / generic relational query."),
     ],
 }
 
