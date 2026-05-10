@@ -212,7 +212,7 @@ Don't use the dot pattern when the diagram sits inside a product page, slide, or
 | Link-blue | `#2e5aa8` | HTTP/API calls, external systems |
 | Dashed | `stroke-dasharray="5,4"` + any color | Optional, passive, return, async |
 
-**Draw arrows before boxes** so z-order puts lines behind nodes.
+**Draw arrows before boxes** so z-order puts lines behind nodes. For non-horizontal/vertical connections, use a 2-bend orthogonal elbow path (`r=8`) instead of a diagonal `<line>` — see `references/type-architecture.md` for the formula. Reserve straight `<line>` for connections that share an x or y axis.
 
 ### Node box — full pattern
 

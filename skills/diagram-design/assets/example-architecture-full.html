@@ -61,11 +61,20 @@
         <rect width="100%" height="100%" fill="#f5f5f5"/>
         <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
 
+        <!-- Zone: Content services (drawn before arrows and nodes) -->
+        <rect x="616" y="144" width="164" height="256" rx="8"
+              fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <rect x="672" y="148" width="52" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="698" y="157" fill="rgba(45,49,66,0.40)" font-size="7" font-family="'Geist Mono', monospace"
+              text-anchor="middle" letter-spacing="0.14em">CONTENT</text>
+
         <!-- Arrows first (behind boxes) -->
         <line x1="168" y1="272" x2="220" y2="272" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
         <line x1="364" y1="272" x2="416" y2="272" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
-        <line x1="576" y1="256" x2="628" y2="212" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
-        <line x1="576" y1="288" x2="628" y2="332" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 576,256 H 594 Q 602,256 602,248 V 220 Q 602,212 610,212 H 628"
+              fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 576,288 H 594 Q 602,288 602,296 V 324 Q 602,332 610,332 H 628"
+              fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
 
         <!-- Arrow labels -->
         <rect x="172" y="252" width="48" height="12" rx="2" fill="#f5f5f5"/>
@@ -74,11 +83,11 @@
         <rect x="368" y="252" width="48" height="12" rx="2" fill="#f5f5f5"/>
         <text x="392" y="262" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SSR</text>
 
-        <rect x="560" y="212" width="56" height="12" rx="2" fill="#f5f5f5"/>
-        <text x="588" y="222" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">READ MDX</text>
+        <rect x="572" y="228" width="60" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="602" y="237" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">READ MDX</text>
 
-        <rect x="560" y="320" width="52" height="12" rx="2" fill="#f5f5f5"/>
-        <text x="586" y="330" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">QUERY</text>
+        <rect x="572" y="304" width="44" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="594" y="313" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">QUERY</text>
 
         <!-- Node: Reader -->
         <rect x="40" y="240" width="128" height="64" rx="6" fill="#f5f5f5"/>
