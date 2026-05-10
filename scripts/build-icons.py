@@ -30,6 +30,7 @@ HTML_OUT = REPO / "skills" / "diagram-design" / "assets" / "icons.html"
 TABLER_URL = "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/outline/{name}.svg"
 TABLER_URL_FALLBACK = "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/{name}.svg"
 SI_URL = "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/{slug}.svg"
+LOGZ_URL = "https://raw.githubusercontent.com/log-z/logos/main/website-logos/{name}.svg"
 
 
 # (slot_name, source, source_id, blurb)
@@ -107,11 +108,13 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
         ("kubernetes", "simple", "kubernetes",         "Kubernetes."),
         ("gcp",        "simple", "googlecloud",        "Google Cloud."),
         ("postgres",   "simple", "postgresql",         "PostgreSQL."),
-        ("redis",      "simple", "redis",              "Redis."),
+        ("redis",      "logz",   "redis",              "Redis."),
         ("nginx",      "simple", "nginx",              "Nginx."),
         ("gitea",      "simple", "gitea",              "Gitea self-hosted git."),
         ("keycloak",   "simple", "keycloak",           "Keycloak identity / SSO."),
         ("minio",      "simple", "minio",              "MinIO S3-compatible object storage."),
+        ("mysql",      "logz",   "mysql",              "MySQL."),
+        ("starrocks",  "logz",   "starrocks",          "StarRocks MPP analytical DB."),
     ],
     "Data stack": [
         ("nifi",      "simple", "apachenifi",      "Apache NiFi data flow."),
@@ -147,6 +150,10 @@ def fetch_simple(slug: str) -> str | None:
     return fetch(SI_URL.format(slug=slug))
 
 
+def fetch_logz(name: str) -> str | None:
+    return fetch(LOGZ_URL.format(name=name))
+
+
 def normalize_tabler(raw: str) -> str:
     """Extract inner geometry from a Tabler SVG and wrap with our normalized attrs."""
     inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
@@ -172,6 +179,23 @@ def normalize_simple(raw: str) -> str:
     body = re.sub(r"\s+", " ", body).strip()
     return (
         '<svg width="24" height="24" viewBox="0 0 24 24" '
+        f'fill="currentColor">{body}</svg>'
+    )
+
+
+def normalize_logz(raw: str) -> str:
+    """log-z/logos SVGs are 100x100 with embedded <style> + class-based fills.
+    Strip the style block and rewrite class refs so the icon inherits currentColor."""
+    inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
+    if not inner:
+        raise ValueError("no <svg> in log-z payload")
+    body = inner.group(1)
+    body = re.sub(r"<style\b[^>]*>.*?</style>", "", body, flags=re.DOTALL | re.IGNORECASE)
+    body = re.sub(r'\bclass="st\d+"', 'fill="currentColor"', body)
+    body = re.sub(r'\bfill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', body)
+    body = re.sub(r"\s+", " ", body).strip()
+    return (
+        '<svg width="24" height="24" viewBox="0 0 100 100" '
         f'fill="currentColor">{body}</svg>'
     )
 
@@ -207,10 +231,16 @@ def build() -> tuple[list[str], list[str]]:
                 raw = fetch_tabler(source_id)
                 normalize = normalize_tabler
                 attribution = f"Tabler Icons / `{source_id}` (MIT)"
-            else:
+            elif source == "simple":
                 raw = fetch_simple(source_id)
                 normalize = normalize_simple
                 attribution = f"Simple Icons / `{source_id}` (CC0)"
+            elif source == "logz":
+                raw = fetch_logz(source_id)
+                normalize = normalize_logz
+                attribution = f"log-z/logos / `{source_id}` (MIT)"
+            else:
+                raise ValueError(f"unknown source: {source}")
 
             if raw is None:
                 misses.append(f"{slot} <- {source}/{source_id}")

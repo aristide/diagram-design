@@ -14,9 +14,17 @@ The MIT license is reproduced in full at https://github.com/tabler/tabler-icons/
 
 - **License:** CC0 1.0 Universal (Public Domain Dedication)
 - **Upstream:** https://github.com/simple-icons/simple-icons
-- **Used in:** filled brand silhouettes in `skills/diagram-design/references/primitive-icons.md` and `skills/diagram-design/assets/icons.html` (Kubernetes, Google Cloud, PostgreSQL, Redis, Nginx).
+- **Used in:** filled brand silhouettes in `skills/diagram-design/references/primitive-icons.md` and `skills/diagram-design/assets/icons.html` (Kubernetes, Google Cloud, PostgreSQL, Nginx, Gitea, Keycloak, MinIO, Apache NiFi, Apache Airflow, Trino, Apache Superset, Jupyter, Python, R).
 
 The CC0 dedication is reproduced in full at https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md.
+
+## log-z/logos
+
+- **License:** MIT
+- **Upstream:** https://github.com/log-z/logos/tree/main/website-logos
+- **Used in:** filled brand silhouettes that aren't carried by Simple Icons or Tabler — currently MySQL, Redis, and StarRocks. Source SVGs are 100×100 with embedded `<style>` + class-based fills; the build script strips the style block and rewrites class refs to `currentColor` for monochrome consistency.
+
+The MIT license is reproduced in full at https://github.com/log-z/logos/blob/main/LICENSE.
 
 ## Trademarks
 
