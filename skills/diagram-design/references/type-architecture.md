@@ -21,6 +21,16 @@
 
 Flip the vertical signs for right+up. Use a plain `<line>` only when endpoints share the same x or y. Arrow labels sit on the vertical segment, centered horizontally on `mid` and vertically between the two corners.
 
+**Port selection — use top/bottom for vertical connectors.** When the destination is noticeably above or below the source, exit the source's top/bottom edge and enter the destination's top/bottom edge. Use a single-bend L-path (horizontal → corner → vertical into the node), not a left/right side port:
+
+```svg
+<!-- entering a node from its bottom (destination above source) -->
+<path d="M x1,y_src H x2-8 Q x2,y_src x2,y_src-8 V y_dst"
+      fill="none" stroke="…" stroke-width="1.2" marker-end="url(#arrow)"/>
+```
+
+Reserve left/right ports for connections that travel primarily horizontally. Entering a node from the side on a mainly-vertical path looks like the arrow punctures the node face rather than arriving from above or below.
+
 ## Zone grouping
 
 Group 2+ nodes that serve the same tier or trust boundary with a zone rect — drawn **before** arrows and nodes (z-order: bg → zones → arrows → nodes):
