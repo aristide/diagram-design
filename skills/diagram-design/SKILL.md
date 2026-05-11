@@ -20,12 +20,14 @@ Eighteen diagram types. One shared design system, complexity budget, and taste g
 
 Open [`references/style-guide.md`](references/style-guide.md) and check the default tokens. If they're still the shipped defaults (paper `#faf7f2`, ink `#1c1917`, accent `#b5523a` rust), **pause and ask the user**:
 
-> *"This is your first Schematic in this project. The style guide is still at the default (neutral stone + rust). Do you want to customize it to match your brand first? Options: (a) run onboarding — I'll pull colors and fonts from your website, (b) paste your tokens manually, (c) proceed with the default for now."*
+> *"This is your first Schematic in this project. The style guide is still at the default (neutral stone + rust). Do you want to customize it to match your brand first? Options: (a) pull from your website URL, (b) extract from an installed skill, (c) extract from a local folder / design-system directory, (d) paste tokens manually, (e) proceed with the default for now."*
 
 Then branch:
-- **(a)** → follow [`references/onboarding.md`](references/onboarding.md) to fetch the site, extract palette + fonts, propose a diff, and write `style-guide.md`.
-- **(b)** → accept the user's tokens and write them into `style-guide.md` under a new "Custom tokens" section.
-- **(c)** → proceed; optionally remind the user they can run onboarding later.
+- **(a)** → follow [`references/onboarding.md § URL`](references/onboarding.md) to fetch the site, extract palette + fonts, propose a diff, and write `style-guide.md`.
+- **(b)** → follow [`references/onboarding.md § Skill`](references/onboarding.md) — ask which skill, read its SKILL.md / CSS / token files, map to semantic roles, propose diff.
+- **(c)** → follow [`references/onboarding.md § Folder`](references/onboarding.md) — ask for the path, glob for CSS/JSON/MD token files, map to semantic roles, propose diff.
+- **(d)** → accept the user's tokens and write them into `style-guide.md` under a new "Custom tokens" section.
+- **(e)** → proceed; optionally remind the user they can run onboarding later.
 
 **Once the style guide has been customized** (or the user explicitly opted for default), skip this gate on subsequent runs. A simple way to detect customization: if the `accent` value in `style-guide.md` differs from `#b5523a`, assume custom.
 
