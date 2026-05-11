@@ -4,7 +4,7 @@
 
 ![Content site architecture](docs/screenshots/architecture.png)
 
-15 types. One Claude Code skill. Your brand in 60 seconds — the skill reads your website and maps colors + fonts to every diagram.
+19 types. One Claude Code skill. Your brand in 60 seconds — the skill reads your website and maps colors + fonts to every diagram.
 
 No Figma. No generic rounded boxes. No 30-minute color-picking sessions.
 
@@ -14,7 +14,7 @@ No Figma. No generic rounded boxes. No 30-minute color-picking sessions.
 
 I write at [littlemight.com](https://littlemight.com?utm_source=diagram-design&utm_medium=readme&utm_campaign=github&utm_content=intro) (and run [BestSelf.co](https://bestself.co?utm_source=diagram-design&utm_medium=readme&utm_campaign=github&utm_content=intro) on the side). Every time I needed a diagram — an architecture sketch, a flowchart, a pyramid of what matters most — I'd ask Claude and get back a generic rounded-box thing that looked nothing like the rest of the site. I'd either fight with Figma for 30 minutes or just skip the diagram.
 
-So I built a Claude Code skill for it. Fourteen types, editorial quality, matches your brand in 60 seconds by reading your website.
+So I built a Claude Code skill for it. Eighteen types, editorial quality, matches your brand in 60 seconds by reading your website.
 
 > *The highest-quality move is usually deletion.* Every node earns its place. The accent color is reserved for the 1–2 things the reader should look at first. Target density: 4/10.
 
@@ -22,7 +22,7 @@ So I built a Claude Code skill for it. Fourteen types, editorial quality, matche
 
 ## What it makes
 
-All 15 diagrams ship in three variants: minimal light, minimal dark, and full-editorial. Open any of them directly in a browser — no build step, no JS, no external images.
+All 19 diagrams ship in three variants: minimal light, minimal dark, and full-editorial. Open any of them directly in a browser — no build step, no JS, no external images.
 
 <table>
 <tr>
@@ -50,9 +50,19 @@ All 15 diagrams ship in three variants: minimal light, minimal dark, and full-ed
   <td align="center"><img src="docs/screenshots/quadrant-consultant.png" alt="Consultant 2×2"><br><b>Consultant 2×2</b><br><sub>Scenario matrix · named cells</sub></td>
   <td align="center"><img src="docs/screenshots/radar.png" alt="Radar / Spider"><br><b>Radar / Spider</b><br><sub>Multi-axis capability comparison</sub></td>
 </tr>
+<tr>
+  <td align="center"><img src="docs/screenshots/bar.png" alt="Bar chart"><br><b>Bar chart</b><br><sub>Categorical comparison</sub></td>
+  <td align="center"><img src="docs/screenshots/line.png" alt="Line chart"><br><b>Line chart</b><br><sub>Trends over time</sub></td>
+  <td align="center"><img src="docs/screenshots/gantt.png" alt="Gantt"><br><b>Gantt</b><br><sub>Tasks and phases on a timeline</sub></td>
+</tr>
+<tr>
+  <td align="center"><img src="docs/screenshots/scatter.png" alt="Scatter plot"><br><b>Scatter plot</b><br><sub>Distribution and correlation</sub></td>
+  <td align="center"></td>
+  <td align="center"></td>
+</tr>
 </table>
 
-**Browse the live gallery:** open [`skills/diagram-design/assets/index.html`](skills/diagram-design/assets/index.html) in your browser to flip through all 14 diagrams with light / dark / full-editorial tabs.
+**Browse the live gallery:** open [`skills/diagram-design/assets/index.html`](skills/diagram-design/assets/index.html) in your browser to flip through all 18 diagrams with light / dark / full-editorial tabs.
 
 ---
 
@@ -127,7 +137,7 @@ Before writing tokens, the skill verifies WCAG AA contrast on `ink` over `paper`
 
 ### Manual override
 
-Prefer to set tokens by hand? Open [`skills/diagram-design/references/style-guide.md`](skills/diagram-design/references/style-guide.md) and edit the table. Everything downstream reads from there — all 14 diagrams, the annotation primitive, and the gallery all inherit semantic role names (`accent`, not `#eb6c36`).
+Prefer to set tokens by hand? Open [`skills/diagram-design/references/style-guide.md`](skills/diagram-design/references/style-guide.md) and edit the table. Everything downstream reads from there — all 18 diagrams, the annotation primitive, and the gallery all inherit semantic role names (`accent`, not `#eb6c36`).
 
 ### First-run gate
 
@@ -142,7 +152,7 @@ See [`skills/diagram-design/references/onboarding.md`](skills/diagram-design/ref
 ## Quickstart
 
 ```bash
-# Open the gallery to see all 14 diagrams
+# Open the gallery to see all 18 diagrams
 open ~/.claude/skills/diagram-design/assets/index.html
 
 # In Claude Code, just ask:
@@ -230,7 +240,7 @@ The top-level `SKILL.md` is always in context. Everything else is pulled in only
 | "Onboard this skill to my site" | `SKILL.md` + `references/onboarding.md` + `references/style-guide.md` |
 | "Add an editorial callout to this diagram" | `SKILL.md` + `references/primitive-annotation.md` |
 | "Give me a hand-drawn version" | `SKILL.md` + `references/primitive-sketchy.md` |
-| Routine diagram-making (any of the 14 diagrams) | Only `SKILL.md` + that one type's reference |
+| Routine diagram-making (any of the 18 diagrams) | Only `SKILL.md` + that one type's reference |
 
 No matter how many types exist, Claude only reads the one you need. Add a new type tomorrow and nothing else changes.
 

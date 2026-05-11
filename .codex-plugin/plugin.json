@@ -1,7 +1,7 @@
 {
   "name": "diagram-design",
-  "description": "Editorial-quality technical and product diagrams - 13 types rendered as standalone HTML with inline SVG, skinnable to match your brand",
-  "version": "1.3.0",
+  "description": "Editorial-quality technical and product diagrams - 18 types rendered as standalone HTML with inline SVG, skinnable to match your brand",
+  "version": "1.4.0",
   "author": {
     "name": "Aristide",
     "url": "https://github.com/aristide"

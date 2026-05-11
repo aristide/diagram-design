@@ -1,16 +1,16 @@
 ---
 name: diagram-design
-description: Create technical and product diagrams — architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant, nested, tree, layer stack, venn, pyramid, radar / spider — as standalone HTML files with inline SVG. Ships with a neutral editorial skin and a first-run gate that prompts users to customize the style guide (colors, fonts) from their own website before generating. Includes annotation-callout primitive and optional sketchy variant.
+description: Create technical and product diagrams — architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant, nested, tree, layer stack, venn, pyramid, radar / spider, bar chart, line chart, Gantt, scatter plot — as standalone HTML files with inline SVG. Ships with a neutral editorial skin and a first-run gate that prompts users to customize the style guide (colors, fonts) from their own website before generating. Includes annotation-callout primitive and optional sketchy variant.
 license: MIT
 metadata:
-  version: "1.3"
+  version: "1.4"
 ---
 
 # Diagram Design
 
 Create visual diagrams as self-contained HTML files with inline SVG and CSS, following an opinionated editorial design system.
 
-Fourteen diagram types. One shared design system, complexity budget, and taste gate. Type-specific conventions live in `references/` and are loaded only when you pick a type.
+Eighteen diagram types. One shared design system, complexity budget, and taste gate. Type-specific conventions live in `references/` and are loaded only when you pick a type.
 
 ---
 
@@ -51,7 +51,7 @@ Applied to schematics:
 
 ## 2. When to Use
 
-Use for any of the 13 diagram types (§3) when a reader will learn more from a visual than from prose, a table, or a bulleted list.
+Use for any of the 18 diagram types (§3) when a reader will learn more from a visual than from prose, a table, or a bulleted list.
 
 **Don't use for:**
 - Quick unicode diagrams → use **wiretext**.
@@ -83,6 +83,10 @@ Before drawing, ask: *Would the reader learn more from this than from a well-wri
 | Stacked abstraction levels | **Layer stack** | [type-layers.md](references/type-layers.md) |
 | Overlap between sets | **Venn** | [type-venn.md](references/type-venn.md) |
 | Ranked hierarchy or conversion drop-off | **Pyramid / funnel** | [type-pyramid.md](references/type-pyramid.md) |
+| Quantitative comparison across categories | **Bar chart** | [type-bar.md](references/type-bar.md) |
+| Continuous trends over time | **Line chart** | [type-line.md](references/type-line.md) |
+| Tasks and phases on a timeline | **Gantt** | [type-gantt.md](references/type-gantt.md) |
+| Distribution and correlation between two variables | **Scatter plot** | [type-scatter.md](references/type-scatter.md) |
 
 Rules of thumb:
 - If a 3-column table communicates the same thing, pick the table.
@@ -299,6 +303,10 @@ Quick check: if a coordinate ends in 1, 2, 3, 5, 6, 7, 9 — fix it.
 | Max radar axes | 5 |
 | Max radar series | 5 |
 | Max focal radar series | 1 |
+| Max bars (bar chart) | 8 |
+| Max series (line chart) | 5 |
+| Max tasks (Gantt) | 12 |
+| Max points (scatter plot) | 30 |
 | Max annotation callouts | 2 |
 
 If you exceed, split into two diagrams (overview + detail).
