@@ -133,7 +133,7 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
     ],
     "Statistical tools": [
         ("spss",  "devicon:plain", "spss",            "IBM SPSS Statistics."),
-        ("sas",   "tabler",       "chart-histogram",  "SAS analytics platform (proxy icon)."),
+        ("sas",   "url", "https://upload.wikimedia.org/wikipedia/commons/1/10/SAS_logo_horiz.svg", "SAS analytics platform."),
         ("stata", "url", "https://icon.icepanel.io/Technology/svg/Stata.svg", "Stata statistical software."),
     ],
     "File formats": [
@@ -146,7 +146,10 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
 
 def fetch(url: str) -> str | None:
     try:
-        with urllib.request.urlopen(url, timeout=15) as r:
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "diagram-design-build/1.0 (https://github.com)"}
+        )
+        with urllib.request.urlopen(req, timeout=15) as r:
             return r.read().decode("utf-8")
     except urllib.error.HTTPError:
         return None
@@ -207,7 +210,12 @@ def normalize_simple(raw: str) -> str:
 def normalize_url(raw: str) -> str:
     """Generic normalizer for directly-fetched SVGs (icepanel, vendor CDNs, etc.).
     Extracts inner paths, rewrites fill/stroke colours to currentColor,
-    and preserves the original viewBox."""
+    and preserves the original viewBox.
+
+    Also strips Inkscape-style layer translate() transforms from top-level <g>
+    elements — these offset the canvas for Inkscape's internal coordinate system
+    but are incorrect for standalone icon use (the viewBox is already sized for
+    the untransformed path coordinates)."""
     vb_match = re.search(r'viewBox="([^"]+)"', raw, re.IGNORECASE)
     viewbox = vb_match.group(1) if vb_match else "0 0 128 128"
     inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
@@ -216,6 +224,9 @@ def normalize_url(raw: str) -> str:
     body = inner.group(1)
     body = re.sub(r"<style\b[^>]*>.*?</style>", "", body, flags=re.DOTALL | re.IGNORECASE)
     body = re.sub(r"<title\b[^>]*>.*?</title>", "", body, flags=re.DOTALL | re.IGNORECASE)
+    body = re.sub(r"<defs\b[^>]*>.*?</defs>",  "", body, flags=re.DOTALL | re.IGNORECASE)
+    # Strip Inkscape canvas-offset transforms (translate only) from group wrappers
+    body = re.sub(r'\btransform="translate\([^"]+\)"', '', body)
     body = re.sub(r'\bfill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', body)
     body = re.sub(r'\bstroke="#[0-9a-fA-F]{3,8}"', 'stroke="currentColor"', body)
     body = re.sub(r'\bfill="none"', '', body)
