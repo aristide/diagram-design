@@ -1,8 +1,8 @@
 """Fetch and normalize the icon set for the diagram-design skill.
 
-Pulls SVGs from Tabler Icons (MIT) and Simple Icons (CC0), normalizes them
-to a 24x24 viewBox using `currentColor` so they inherit ink from context,
-and emits two artifacts:
+Pulls SVGs from Tabler Icons (MIT), Simple Icons (CC0), log-z/logos (MIT),
+and Devicon (MIT), normalizes them to a 24x24 viewBox using `currentColor`
+so they inherit ink from context, and emits two artifacts:
 
   - skills/diagram-design/references/primitive-icons.md  (catalog with snippets)
   - skills/diagram-design/assets/icons.html               (visual gallery)
@@ -31,6 +31,7 @@ TABLER_URL = "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/o
 TABLER_URL_FALLBACK = "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/{name}.svg"
 SI_URL = "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/{slug}.svg"
 LOGZ_URL = "https://raw.githubusercontent.com/log-z/logos/main/website-logos/{name}.svg"
+DEVICON_URL = "https://raw.githubusercontent.com/devicons/devicon/master/icons/{name}/{name}-{variant}.svg"
 
 
 # (slot_name, source, source_id, blurb)
@@ -129,6 +130,16 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
         ("r",      "simple", "r",      "R statistical language."),
         ("sql",    "tabler", "sql",    "SQL / generic relational query."),
     ],
+    "Statistical tools": [
+        ("spss",  "devicon:plain", "spss",            "IBM SPSS Statistics."),
+        ("sas",   "tabler",       "chart-histogram",  "SAS analytics platform (proxy icon)."),
+        ("stata", "tabler",       "chart-dots-3",     "Stata statistical software (proxy icon)."),
+    ],
+    "File formats": [
+        ("excel", "tabler", "file-type-xls",  "Microsoft Excel spreadsheet."),
+        ("csv",   "tabler", "file-type-csv",  "Comma-separated values file."),
+        ("txt",   "tabler", "file-type-txt",  "Plain text file."),
+    ],
 }
 
 
@@ -153,6 +164,10 @@ def fetch_simple(slug: str) -> str | None:
 
 def fetch_logz(name: str) -> str | None:
     return fetch(LOGZ_URL.format(name=name))
+
+
+def fetch_devicon(name: str, variant: str = "plain") -> str | None:
+    return fetch(DEVICON_URL.format(name=name, variant=variant))
 
 
 def normalize_tabler(raw: str) -> str:
@@ -180,6 +195,25 @@ def normalize_simple(raw: str) -> str:
     body = re.sub(r"\s+", " ", body).strip()
     return (
         '<svg width="24" height="24" viewBox="0 0 24 24" '
+        f'fill="currentColor">{body}</svg>'
+    )
+
+
+def normalize_devicon(raw: str) -> str:
+    """Devicon SVGs have colored fills and a 128x128 or 32x32 viewBox.
+    Strip fills/classes and rewrite to 24x24 currentColor."""
+    inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
+    if not inner:
+        raise ValueError("no <svg> in Devicon payload")
+    body = inner.group(1)
+    body = re.sub(r"<style\b[^>]*>.*?</style>", "", body, flags=re.DOTALL | re.IGNORECASE)
+    body = re.sub(r"<title\b[^>]*>.*?</title>", "", body, flags=re.DOTALL | re.IGNORECASE)
+    body = re.sub(r'\bfill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', body)
+    body = re.sub(r'\bstroke="#[0-9a-fA-F]{3,8}"', 'stroke="currentColor"', body)
+    body = re.sub(r'\bclass="[^"]*"', 'fill="currentColor"', body)
+    body = re.sub(r"\s+", " ", body).strip()
+    return (
+        '<svg width="24" height="24" viewBox="0 0 128 128" '
         f'fill="currentColor">{body}</svg>'
     )
 
@@ -240,6 +274,12 @@ def build() -> tuple[list[str], list[str]]:
                 raw = fetch_logz(source_id)
                 normalize = normalize_logz
                 attribution = f"log-z/logos / `{source_id}` (MIT)"
+            elif source.startswith("devicon"):
+                # format: "devicon:<variant>" e.g. "devicon:plain" or "devicon:original"
+                variant = source.split(":")[1] if ":" in source else "plain"
+                raw = fetch_devicon(source_id, variant)
+                normalize = normalize_devicon
+                attribution = f"Devicon / `{source_id}-{variant}` (MIT)"
             else:
                 raise ValueError(f"unknown source: {source}")
 
@@ -276,8 +316,10 @@ def build() -> tuple[list[str], list[str]]:
         "---\n\n"
         "## License attribution\n\n"
         "- **Tabler Icons** — MIT — https://github.com/tabler/tabler-icons\n"
-        "- **Simple Icons** — CC0 — https://github.com/simple-icons/simple-icons\n\n"
-        "Both libraries' licenses permit redistribution, including in this "
+        "- **Simple Icons** — CC0 — https://github.com/simple-icons/simple-icons\n"
+        "- **Devicon** — MIT — https://github.com/devicons/devicon\n"
+        "- **log-z/logos** — MIT — https://github.com/log-z/logos\n\n"
+        "All libraries' licenses permit redistribution, including in this "
         "repository's MIT-licensed source. Brand logos retain their "
         "respective trademarks; this set is for documentation and "
         "illustrative use only.\n"
@@ -401,7 +443,7 @@ GALLERY_TEMPLATE = """<!DOCTYPE html>
     </div>
     {SECTIONS}
     <footer>
-      Tabler Icons · MIT · github.com/tabler/tabler-icons &nbsp;·&nbsp; Simple Icons · CC0 · github.com/simple-icons/simple-icons
+      Tabler Icons · MIT · github.com/tabler/tabler-icons &nbsp;·&nbsp; Simple Icons · CC0 · github.com/simple-icons/simple-icons &nbsp;·&nbsp; Devicon · MIT · github.com/devicons/devicon
     </footer>
   </div>
 </body>
