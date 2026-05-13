@@ -89,6 +89,7 @@ Before drawing, ask: *Would the reader learn more from this than from a well-wri
 | Continuous trends over time | **Line chart** | [type-line.md](references/type-line.md) |
 | Tasks and phases on a timeline | **Gantt** | [type-gantt.md](references/type-gantt.md) |
 | Distribution and correlation between two variables | **Scatter plot** | [type-scatter.md](references/type-scatter.md) |
+| End-to-end data stack on a container cluster | **Data platform** | [type-data-platform.md](references/type-data-platform.md) |
 
 Rules of thumb:
 - If a 3-column table communicates the same thing, pick the table.
