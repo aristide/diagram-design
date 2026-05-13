@@ -224,13 +224,13 @@ Cache layer.
 Source: Tabler Icons / `bolt` (MIT)
 
 ### bucket
-Object storage / bucket.
+Object storage / S3 bucket.
 
 ```svg
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2" /> <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /> <path d="M10 12l4 0" /></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a8 4 0 1 0 16 0a8 4 0 1 0 -16 0" /> <path d="M4 7c0 .664 .088 1.324 .263 1.965l2.737 10.035c.5 1.5 2.239 2 5 2s4.5 -.5 5 -2c.333 -1 1.246 -4.345 2.737 -10.035a7.45 7.45 0 0 0 .263 -1.965" /></svg>
 ```
 
-Source: Tabler Icons / `archive` (MIT)
+Source: Tabler Icons / `bucket` (MIT)
 
 ### backup
 Backup or snapshot.
@@ -536,6 +536,15 @@ Keycloak identity / SSO.
 ```
 
 Source: Simple Icons / `keycloak` (CC0)
+
+### active-directory
+Active Directory / LDAP identity directory.
+
+```svg
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /> <path d="M10 16h6" /> <path d="M11 11a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M4 8h3" /> <path d="M4 12h3" /> <path d="M4 16h3" /></svg>
+```
+
+Source: Tabler Icons / `address-book` (MIT)
 
 ### minio
 MinIO S3-compatible object storage.
