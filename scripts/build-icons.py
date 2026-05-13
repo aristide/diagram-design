@@ -32,6 +32,7 @@ TABLER_URL_FALLBACK = "https://raw.githubusercontent.com/tabler/tabler-icons/mai
 SI_URL = "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/{slug}.svg"
 LOGZ_URL = "https://raw.githubusercontent.com/log-z/logos/main/website-logos/{name}.svg"
 DEVICON_URL = "https://raw.githubusercontent.com/devicons/devicon/master/icons/{name}/{name}-{variant}.svg"
+# For "url" source: source_id is the full URL; blurb should note license
 
 
 # (slot_name, source, source_id, blurb)
@@ -133,7 +134,7 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
     "Statistical tools": [
         ("spss",  "devicon:plain", "spss",            "IBM SPSS Statistics."),
         ("sas",   "tabler",       "chart-histogram",  "SAS analytics platform (proxy icon)."),
-        ("stata", "tabler",       "chart-dots-3",     "Stata statistical software (proxy icon)."),
+        ("stata", "url", "https://icon.icepanel.io/Technology/svg/Stata.svg", "Stata statistical software."),
     ],
     "File formats": [
         ("excel", "tabler", "file-type-xls",  "Microsoft Excel spreadsheet."),
@@ -170,6 +171,10 @@ def fetch_devicon(name: str, variant: str = "plain") -> str | None:
     return fetch(DEVICON_URL.format(name=name, variant=variant))
 
 
+def fetch_url(url: str) -> str | None:
+    return fetch(url)
+
+
 def normalize_tabler(raw: str) -> str:
     """Extract inner geometry from a Tabler SVG and wrap with our normalized attrs."""
     inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
@@ -195,6 +200,28 @@ def normalize_simple(raw: str) -> str:
     body = re.sub(r"\s+", " ", body).strip()
     return (
         '<svg width="24" height="24" viewBox="0 0 24 24" '
+        f'fill="currentColor">{body}</svg>'
+    )
+
+
+def normalize_url(raw: str) -> str:
+    """Generic normalizer for directly-fetched SVGs (icepanel, vendor CDNs, etc.).
+    Extracts inner paths, rewrites fill/stroke colours to currentColor,
+    and preserves the original viewBox."""
+    vb_match = re.search(r'viewBox="([^"]+)"', raw, re.IGNORECASE)
+    viewbox = vb_match.group(1) if vb_match else "0 0 128 128"
+    inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
+    if not inner:
+        raise ValueError("no <svg> in payload")
+    body = inner.group(1)
+    body = re.sub(r"<style\b[^>]*>.*?</style>", "", body, flags=re.DOTALL | re.IGNORECASE)
+    body = re.sub(r"<title\b[^>]*>.*?</title>", "", body, flags=re.DOTALL | re.IGNORECASE)
+    body = re.sub(r'\bfill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', body)
+    body = re.sub(r'\bstroke="#[0-9a-fA-F]{3,8}"', 'stroke="currentColor"', body)
+    body = re.sub(r'\bfill="none"', '', body)
+    body = re.sub(r"\s+", " ", body).strip()
+    return (
+        f'<svg width="24" height="24" viewBox="{viewbox}" '
         f'fill="currentColor">{body}</svg>'
     )
 
@@ -280,6 +307,12 @@ def build() -> tuple[list[str], list[str]]:
                 raw = fetch_devicon(source_id, variant)
                 normalize = normalize_devicon
                 attribution = f"Devicon / `{source_id}-{variant}` (MIT)"
+            elif source == "url":
+                # source_id is the full URL; fetch and normalize generically
+                raw = fetch_url(source_id)
+                normalize = normalize_url
+                domain = re.sub(r"https?://([^/]+)/.*", r"\1", source_id)
+                attribution = f"Direct fetch / `{domain}` — verify license before use"
             else:
                 raise ValueError(f"unknown source: {source}")
 
