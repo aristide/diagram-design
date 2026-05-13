@@ -133,7 +133,7 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
     ],
     "Statistical tools": [
         ("spss",    "devicon:plain", "spss",            "IBM SPSS Statistics."),
-        ("sas",     "url", "https://upload.wikimedia.org/wikipedia/commons/1/10/SAS_logo_horiz.svg", "SAS analytics platform."),
+        ("sas",     "url", "https://www.svgrepo.com/download/374062/sas.svg", "SAS analytics platform."),
         ("stata",   "url", "https://icon.icepanel.io/Technology/svg/Stata.svg", "Stata statistical software."),
         ("rstudio", "devicon:plain", "rstudio",         "RStudio / Posit IDE for R and Python."),
         ("qgis",    "simple",        "qgis",            "QGIS open-source GIS platform."),
@@ -214,10 +214,13 @@ def normalize_url(raw: str) -> str:
     Extracts inner paths, rewrites fill/stroke colours to currentColor,
     and preserves the original viewBox.
 
-    Also strips Inkscape-style layer translate() transforms from top-level <g>
-    elements — these offset the canvas for Inkscape's internal coordinate system
-    but are incorrect for standalone icon use (the viewBox is already sized for
-    the untransformed path coordinates)."""
+    Rules applied:
+    - White / near-white fills (#fff, #ffffff, white) are kept as-is — they
+      act as contrast cutouts in 2-colour logos (e.g. white letter on coloured
+      circle).  Every other colour becomes currentColor.
+    - inline style="fill:#..." is rewritten to a fill= attribute.
+    - Inkscape layer translate() transforms are stripped (canvas offset artefact).
+    """
     vb_match = re.search(r'viewBox="([^"]+)"', raw, re.IGNORECASE)
     viewbox = vb_match.group(1) if vb_match else "0 0 128 128"
     inner = re.search(r"<svg\b[^>]*>(.*?)</svg>", raw, flags=re.DOTALL | re.IGNORECASE)
@@ -227,9 +230,28 @@ def normalize_url(raw: str) -> str:
     body = re.sub(r"<style\b[^>]*>.*?</style>", "", body, flags=re.DOTALL | re.IGNORECASE)
     body = re.sub(r"<title\b[^>]*>.*?</title>", "", body, flags=re.DOTALL | re.IGNORECASE)
     body = re.sub(r"<defs\b[^>]*>.*?</defs>",  "", body, flags=re.DOTALL | re.IGNORECASE)
-    # Strip Inkscape canvas-offset transforms (translate only) from group wrappers
+    # Strip Inkscape canvas-offset translate transforms from group wrappers
     body = re.sub(r'\btransform="translate\([^"]+\)"', '', body)
-    body = re.sub(r'\bfill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', body)
+
+    def _rewrite_fill(m: re.Match) -> str:
+        """Keep white; turn everything else into currentColor."""
+        hex_val = m.group(1).lower().strip()
+        if hex_val in ("#fff", "#ffffff", "white", "#fefefe", "#fdfdfd"):
+            return 'fill="#fff"'
+        return 'fill="currentColor"'
+
+    # Rewrite inline style="fill:#rrggbb" → standalone fill= attribute
+    body = re.sub(
+        r'style="[^"]*fill:\s*(#[0-9a-fA-F]{3,8}|white)[^"]*"',
+        lambda m: _rewrite_fill(re.search(r'(#[0-9a-fA-F]{3,8}|white)', m.group(0))),
+        body,
+    )
+    # Rewrite standalone fill="#rrggbb" attributes
+    body = re.sub(
+        r'\bfill="(#[0-9a-fA-F]{3,8}|white)"',
+        _rewrite_fill,
+        body,
+    )
     body = re.sub(r'\bstroke="#[0-9a-fA-F]{3,8}"', 'stroke="currentColor"', body)
     body = re.sub(r'\bfill="none"', '', body)
     body = re.sub(r"\s+", " ", body).strip()
