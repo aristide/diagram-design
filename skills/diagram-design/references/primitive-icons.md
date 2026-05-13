@@ -678,6 +678,24 @@ Stata statistical software.
 
 Source: Direct fetch / `icon.icepanel.io` — verify license before use
 
+### rstudio
+RStudio / Posit IDE for R and Python.
+
+```svg
+<svg width="24" height="24" viewBox="0 0 128 128" fill="currentColor"><path fill="currentColor" d="M71.4 38.8c-1.5-.6-3.9-1-6.9-1.1-4.2-.1-9 .4-9.2.5v20c13.3.6 15.5-1.7 15.5-1.7 11.6-5.9 4.3-16.2.6-17.7z"/><path fill="currentColor" d="M64 0C28.6 0 0 28.6 0 64s28.6 64 64 64 64-28.6 64-64S99.3 0 64 0zm28.6 89.8H82L64.4 63.5h-9V84h9v5.8H41.5v-5.7l7.6-.1-.1-45.9c-.8-.2-7.5-.8-7.5-.8V32c1 1 7.9 1.2 7.9 1.2 1.6.1 3.9.2 5.2-.1 9.3-1.7 16.4-.4 16.4-.4 14 3.2 14.2 15.8 10.3 22.6-3.5 5.8-10.3 7.2-10.3 7.2l14.4 21.8 7.2-.1v5.6z"/></svg>
+```
+
+Source: Devicon / `rstudio-plain` (MIT)
+
+### qgis
+QGIS open-source GIS platform.
+
+```svg
+<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><title>QGIS</title><path d="M12.879 13.006v3.65l-3.004-3.048v-3.495h3.582l2.852 2.893h-3.43zm10.886 7.606V24h-3.654l-5.73-5.9v-3.55h3.354l6.03 6.062zm-10.828-1.448l3.372 3.371c-1.309.442-2.557.726-4.325.726C5.136 23.26 0 18.243 0 11.565 0 4.92 5.136 0 11.984 0 18.864 0 24 4.952 24 11.565c0 2.12-.523 4.076-1.457 5.759l-3.625-3.725a8.393 8.393 0 0 0 .24-2.005c0-4.291-3.148-7.527-7.1-7.527-3.954 0-7.248 3.236-7.248 7.527s3.33 7.6 7.247 7.6c.548 0 .661.017.88-.03z"/></svg>
+```
+
+Source: Simple Icons / `qgis` (CC0)
+
 ## File formats
 
 ### excel

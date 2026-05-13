@@ -132,9 +132,11 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
         ("sql",    "tabler", "sql",    "SQL / generic relational query."),
     ],
     "Statistical tools": [
-        ("spss",  "devicon:plain", "spss",            "IBM SPSS Statistics."),
-        ("sas",   "url", "https://upload.wikimedia.org/wikipedia/commons/1/10/SAS_logo_horiz.svg", "SAS analytics platform."),
-        ("stata", "url", "https://icon.icepanel.io/Technology/svg/Stata.svg", "Stata statistical software."),
+        ("spss",    "devicon:plain", "spss",            "IBM SPSS Statistics."),
+        ("sas",     "url", "https://upload.wikimedia.org/wikipedia/commons/1/10/SAS_logo_horiz.svg", "SAS analytics platform."),
+        ("stata",   "url", "https://icon.icepanel.io/Technology/svg/Stata.svg", "Stata statistical software."),
+        ("rstudio", "devicon:plain", "rstudio",         "RStudio / Posit IDE for R and Python."),
+        ("qgis",    "simple",        "qgis",            "QGIS open-source GIS platform."),
     ],
     "File formats": [
         ("excel", "tabler", "file-type-xls",  "Microsoft Excel spreadsheet."),
