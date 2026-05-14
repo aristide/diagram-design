@@ -91,6 +91,7 @@ Before drawing, ask: *Would the reader learn more from this than from a well-wri
 | Distribution and correlation between two variables | **Scatter plot** | [type-scatter.md](references/type-scatter.md) |
 | End-to-end data stack on a container cluster | **Data platform** | [type-data-platform.md](references/type-data-platform.md) |
 | Multi-actor sequential process with data handoffs | **Process** | [type-process.md](references/type-process.md) |
+| Multi-tier data storage with quality levels and access policies | **Data org** | [type-data-org.md](references/type-data-org.md) |
 
 Rules of thumb:
 - If a 3-column table communicates the same thing, pick the table.
