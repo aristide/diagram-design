@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D4N Platform · Source to Insight — Role-Scoped Data Flow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-paper:       #F4F6FA;
+      --color-paper-2:     #EAECF2;
+      --color-ink:         #0B1F38;
+      --color-muted:       #5A6B82;
+      --color-soft:        #8A99AE;
+      --color-rule:        rgba(11,31,56,0.10);
+      --color-rule-solid:  rgba(90,107,130,0.25);
+      --color-accent:      #E63558;
+      --color-accent-tint: rgba(230,53,88,0.07);
+      --color-link:        #167C7C;
+      --font-sans:   'Geist', system-ui, sans-serif;
+      --font-serif:  'Instrument Serif', serif;
+      --font-mono:   'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      min-height: 100vh;
+      padding: 3rem 2rem;
+      color: var(--color-ink);
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .header { margin-bottom: 2.5rem; }
+
+    .header-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--color-muted);
+      max-width: 60ch;
+    }
+
+    /* ── Diagram container ───────────────────────────────────────── */
+    .diagram-container {
+      background: transparent;
+      border: none;
+      padding: 0;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; min-width: 728px; display: block; }
+
+    /* ── Info cards ──────────────────────────────────────────────── */
+    .cards {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 0.9fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 860px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid var(--color-rule);
+      padding: 1.25rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.875rem;
+      padding-bottom: 0.875rem;
+      border-bottom: 1px solid rgba(11,31,56,0.08);
+    }
+
+    .card-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .card-dot.ink    { background: var(--color-ink); }
+    .card-dot.muted  { background: var(--color-muted); }
+    .card-dot.accent { background: var(--color-accent); }
+    .card-dot.link   { background: var(--color-link); }
+
+    .card h3 {
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-ink);
+      letter-spacing: -0.005em;
+    }
+
+    .card ul {
+      list-style: none;
+      color: var(--color-muted);
+      font-size: 0.8125rem;
+      line-height: 1.6;
+    }
+
+    .card li {
+      margin-bottom: 0.35rem;
+      padding-left: 0.875rem;
+      position: relative;
+    }
+
+    .card li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: rgba(11,31,56,0.22);
+      font-size: 0.75rem;
+    }
+
+    .card li strong {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-ink);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(11,31,56,0.10);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--color-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <p class="header-eyebrow">D4N Platform · Role-Scoped Data Flow · 2025</p>
+    <h1>Source to Insight</h1>
+    <p class="subtitle">How data moves through the D4N platform across four organisational roles — from raw ingestion to published analytics — with typed payloads and access boundaries at each handoff.</p>
+  </div>
+
+  <!-- Main Diagram -->
+  <div class="diagram-container">
+    <!--
+      ViewBox: 728 × 436
+      Label col: 140px | Slot: 112px × 5 steps | Right margin: 28px
+      Lanes (4 × 80px): Admin y=36–116, Engineers y=116–196, Scientists y=196–276, Consumers y=276–356
+      Legend: y=356–436
+    -->
+    <svg viewBox="0 0 728 436" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="11" cy="11" r="0.8" fill="rgba(11,31,56,0.10)"/>
+        </pattern>
+        <marker id="arr-muted" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#5A6B82"/>
+        </marker>
+        <marker id="arr-accent" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#E63558"/>
+        </marker>
+        <marker id="arr-link" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#167C7C"/>
+        </marker>
+      </defs>
+
+      <!-- Background -->
+      <rect width="728" height="436" fill="#F4F6FA"/>
+      <rect width="728" height="436" fill="url(#dots)"/>
+
+      <!-- Alternating lane tints: Admin (odd) and Scientists (odd) -->
+      <rect x="0" y="36"  width="728" height="80" fill="rgba(11,31,56,0.018)"/>
+      <rect x="0" y="196" width="728" height="80" fill="rgba(11,31,56,0.018)"/>
+
+      <!-- Lane dividers -->
+      <line x1="0" y1="36"  x2="728" y2="36"  stroke="rgba(11,31,56,0.12)" stroke-width="0.8"/>
+      <line x1="0" y1="116" x2="728" y2="116" stroke="rgba(11,31,56,0.12)" stroke-width="0.8"/>
+      <line x1="0" y1="196" x2="728" y2="196" stroke="rgba(11,31,56,0.12)" stroke-width="0.8"/>
+      <line x1="0" y1="276" x2="728" y2="276" stroke="rgba(11,31,56,0.12)" stroke-width="0.8"/>
+      <line x1="0" y1="356" x2="728" y2="356" stroke="rgba(11,31,56,0.12)" stroke-width="0.8"/>
+
+      <!-- Label column right border -->
+      <line x1="140" y1="36" x2="140" y2="356" stroke="rgba(11,31,56,0.12)" stroke-width="0.8"/>
+
+      <!-- Lane labels -->
+      <text x="70" y="72" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">DATA</text>
+      <text x="70" y="84" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">ADMINS</text>
+
+      <text x="70" y="148" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">DATA</text>
+      <text x="70" y="160" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">ENGINEERS</text>
+
+      <text x="70" y="228" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">DATA</text>
+      <text x="70" y="240" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">SCIENTISTS</text>
+
+      <text x="70" y="308" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">DATA</text>
+      <text x="70" y="320" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" font-weight="500" letter-spacing="0.18em" fill="#5A6B82">CONSUMERS</text>
+
+      <!-- Step header chips (y=6–28 within 0–36 header strip) -->
+      <!-- S1 COLLECT -->
+      <rect x="180" y="6" width="32" height="16" rx="8" fill="rgba(11,31,56,0.12)"/>
+      <text x="196" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="7" font-weight="500" fill="#0B1F38">01</text>
+      <text x="196" y="29" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="500" letter-spacing="0.12em" fill="#5A6B82">COLLECT</text>
+
+      <!-- S2 STORE -->
+      <rect x="292" y="6" width="32" height="16" rx="8" fill="rgba(11,31,56,0.12)"/>
+      <text x="308" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="7" font-weight="500" fill="#0B1F38">02</text>
+      <text x="308" y="29" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="500" letter-spacing="0.12em" fill="#5A6B82">STORE</text>
+
+      <!-- S3 TRANSFORM -->
+      <rect x="404" y="6" width="32" height="16" rx="8" fill="rgba(11,31,56,0.12)"/>
+      <text x="420" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="7" font-weight="500" fill="#0B1F38">03</text>
+      <text x="420" y="29" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="500" letter-spacing="0.12em" fill="#5A6B82">TRANSFORM</text>
+
+      <!-- S4 ANALYZE — focal -->
+      <rect x="516" y="6" width="32" height="16" rx="8" fill="rgba(230,53,88,0.20)"/>
+      <text x="532" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="7" font-weight="500" fill="#E63558">04</text>
+      <text x="532" y="29" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="500" letter-spacing="0.12em" fill="#E63558">ANALYZE</text>
+
+      <!-- S5 PUBLISH -->
+      <rect x="628" y="6" width="32" height="16" rx="8" fill="rgba(11,31,56,0.12)"/>
+      <text x="644" y="14" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="7" font-weight="500" fill="#0B1F38">05</text>
+      <text x="644" y="29" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="500" letter-spacing="0.12em" fill="#5A6B82">PUBLISH</text>
+
+      <!-- ── ARROWS (drawn before nodes) ── -->
+
+      <!-- 1. Admin S1 → Admin S2: horizontal governance hand-off -->
+      <line x1="246" y1="76" x2="257" y2="76" stroke="#5A6B82" stroke-width="1" marker-end="url(#arr-muted)"/>
+
+      <!-- 2. Admin S1 → Engineers S1: dashed — enables ingest setup -->
+      <line x1="196" y1="108" x2="196" y2="123" stroke="#5A6B82" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr-muted)"/>
+
+      <!-- 3. Admin S2 → Engineers S2: dashed — access grant to raw zone -->
+      <line x1="308" y1="108" x2="308" y2="123" stroke="#5A6B82" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr-muted)"/>
+
+      <!-- 4. Engineers S1 → Engineers S2: horizontal — raw landing -->
+      <line x1="246" y1="156" x2="257" y2="156" stroke="#5A6B82" stroke-width="1" marker-end="url(#arr-muted)"/>
+
+      <!-- 5. Engineers S2 → Engineers S3: horizontal — raw → clean -->
+      <line x1="358" y1="156" x2="369" y2="156" stroke="#5A6B82" stroke-width="1" marker-end="url(#arr-muted)"/>
+
+      <!-- 6. Engineers S3 → Scientists S4: cross-lane accent — anonymized data handoff
+           Right-exit (470,156) → right to x=524 → 8px corner → down to (532,204) -->
+      <path d="M470,156 H524 Q532,156 532,164 V204" fill="none" stroke="#E63558" stroke-width="1.2" marker-end="url(#arr-accent)"/>
+      <!-- Label mask + text on the horizontal segment -->
+      <rect x="476" y="148" width="36" height="10" rx="2" fill="#F4F6FA"/>
+      <text x="494" y="153" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#E63558">anon data</text>
+
+      <!-- 7. Scientists S4 → Scientists S5: horizontal — model output -->
+      <line x1="582" y1="236" x2="593" y2="236" stroke="#5A6B82" stroke-width="1" marker-end="url(#arr-muted)"/>
+
+      <!-- 8. Scientists S5 → Consumers S5: vertical teal — published output -->
+      <line x1="644" y1="268" x2="644" y2="283" stroke="#167C7C" stroke-width="1" marker-end="url(#arr-link)"/>
+
+      <!-- ── NODES ── -->
+
+      <!-- ADMIN · S1 Project Setup (146, 44) -->
+      <rect x="146" y="44" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="150" y="48" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="159" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">ADM</text>
+      <text x="196" y="67" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Project Setup</text>
+      <text x="196" y="79" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">create · assign roles</text>
+      <text x="196" y="91" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">Platform console</text>
+
+      <!-- ADMIN · S2 Access Control (258, 44) -->
+      <rect x="258" y="44" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="262" y="48" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="271" y="53" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">ADM</text>
+      <text x="308" y="67" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Access Control</text>
+      <text x="308" y="79" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">bucket policies · LDAP</text>
+      <text x="308" y="91" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">MinIO · LDAP console</text>
+
+      <!-- ENGINEERS · S1 Source Ingest (146, 124) -->
+      <rect x="146" y="124" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="150" y="128" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="159" y="133" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">ENG</text>
+      <text x="196" y="147" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Source Ingest</text>
+      <text x="196" y="159" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">ext. sources → raw</text>
+      <text x="196" y="171" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">NiFi · API · SFTP</text>
+      <!-- chips y = 124+54 = 178 -->
+      <rect x="150" y="178" width="16" height="8" rx="3" fill="#6e6479"/>
+      <text x="158" y="182" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">WB</text>
+      <rect x="226" y="178" width="16" height="8" rx="3" fill="#5e7a9b"/>
+      <text x="234" y="182" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">DB</text>
+
+      <!-- ENGINEERS · S2 Raw Store (258, 124) -->
+      <rect x="258" y="124" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="262" y="128" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="271" y="133" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">ENG</text>
+      <text x="308" y="147" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Raw Store</text>
+      <text x="308" y="159" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">raw landing zones</text>
+      <text x="308" y="171" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">MinIO raw</text>
+      <!-- chips y = 178 -->
+      <rect x="262" y="178" width="16" height="8" rx="3" fill="#5e7a9b"/>
+      <text x="270" y="182" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">DB</text>
+      <rect x="338" y="178" width="16" height="8" rx="3" fill="#5e7a9b"/>
+      <text x="346" y="182" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">DB</text>
+
+      <!-- ENGINEERS · S3 Clean & Stage (370, 124) -->
+      <rect x="370" y="124" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="374" y="128" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="383" y="133" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">ENG</text>
+      <text x="420" y="147" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Clean &amp; Stage</text>
+      <text x="420" y="159" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">raw → staging → anon</text>
+      <text x="420" y="171" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">NiFi · Trino</text>
+      <!-- chips y = 178 -->
+      <rect x="374" y="178" width="16" height="8" rx="3" fill="#5e7a9b"/>
+      <text x="382" y="182" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">DB</text>
+      <rect x="450" y="178" width="16" height="8" rx="3" fill="#b8915a"/>
+      <text x="458" y="182" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">TB</text>
+
+      <!-- SCIENTISTS · S4 Explore & Model — FOCAL (482, 204) -->
+      <rect x="482" y="204" width="100" height="64" rx="6" fill="rgba(230,53,88,0.07)" stroke="#E63558" stroke-width="1.2"/>
+      <rect x="486" y="208" width="18" height="10" rx="3" fill="rgba(230,53,88,0.20)"/>
+      <text x="495" y="213" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#E63558">SCI</text>
+      <text x="532" y="227" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Explore &amp; Model</text>
+      <text x="532" y="239" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">anon data → insights</text>
+      <text x="532" y="251" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">JupyterHub · Trino</text>
+      <!-- chips y = 204+54 = 258 -->
+      <rect x="486" y="258" width="16" height="8" rx="3" fill="#b8915a"/>
+      <text x="494" y="262" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">TB</text>
+      <rect x="562" y="258" width="16" height="8" rx="3" fill="#9c6b50"/>
+      <text x="570" y="262" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">FL</text>
+
+      <!-- SCIENTISTS · S5 Publish Findings (594, 204) -->
+      <rect x="594" y="204" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="598" y="208" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="607" y="213" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">SCI</text>
+      <text x="644" y="227" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Publish Findings</text>
+      <text x="644" y="239" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">models → dashboards</text>
+      <text x="644" y="251" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">Superset · Reports</text>
+      <!-- chips y = 258 -->
+      <rect x="598" y="258" width="16" height="8" rx="3" fill="#9c6b50"/>
+      <text x="606" y="262" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">FL</text>
+      <rect x="674" y="258" width="16" height="8" rx="3" fill="#9c6b50"/>
+      <text x="682" y="262" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">FL</text>
+
+      <!-- CONSUMERS · S5 Query Insights (594, 284) -->
+      <rect x="594" y="284" width="100" height="64" rx="6" fill="#F4F6FA" stroke="rgba(11,31,56,0.25)" stroke-width="1"/>
+      <rect x="598" y="288" width="18" height="10" rx="3" fill="rgba(11,31,56,0.12)"/>
+      <text x="607" y="293" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" font-weight="600" fill="#0B1F38">CON</text>
+      <text x="644" y="307" text-anchor="middle" font-family="'Geist',sans-serif" font-size="9" font-weight="600" fill="#0B1F38">Query Insights</text>
+      <text x="644" y="319" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">aggregated views</text>
+      <text x="644" y="331" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#8A99AE">Trino (read-only)</text>
+      <!-- chips y = 284+54 = 338 -->
+      <rect x="598" y="338" width="16" height="8" rx="3" fill="#b8915a"/>
+      <text x="606" y="342" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">TB</text>
+      <rect x="674" y="338" width="16" height="8" rx="3" fill="#b8915a"/>
+      <text x="682" y="342" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">TB</text>
+
+      <!-- ── LEGEND (y=356–436) ── -->
+
+      <!-- Row 1: Step chips (y≈368–378) -->
+      <text x="144" y="372" text-anchor="start" font-family="'Geist Mono',monospace" font-size="6.5" font-weight="500" letter-spacing="0.12em" fill="#8A99AE">STEPS</text>
+      <!-- S1 -->
+      <rect x="180" y="364" width="24" height="12" rx="6" fill="rgba(11,31,56,0.12)"/>
+      <text x="192" y="370" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" fill="#0B1F38">01</text>
+      <text x="208" y="372" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Collect</text>
+      <!-- S2 -->
+      <rect x="256" y="364" width="24" height="12" rx="6" fill="rgba(11,31,56,0.12)"/>
+      <text x="268" y="370" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" fill="#0B1F38">02</text>
+      <text x="284" y="372" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Store</text>
+      <!-- S3 -->
+      <rect x="320" y="364" width="24" height="12" rx="6" fill="rgba(11,31,56,0.12)"/>
+      <text x="332" y="370" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" fill="#0B1F38">03</text>
+      <text x="348" y="372" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Transform</text>
+      <!-- S4 focal -->
+      <rect x="404" y="364" width="24" height="12" rx="6" fill="rgba(230,53,88,0.20)"/>
+      <text x="416" y="370" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" fill="#E63558">04</text>
+      <text x="432" y="372" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#E63558">Analyze (focal)</text>
+      <!-- S5 -->
+      <rect x="508" y="364" width="24" height="12" rx="6" fill="rgba(11,31,56,0.12)"/>
+      <text x="520" y="370" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6" fill="#0B1F38">05</text>
+      <text x="536" y="372" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Publish &amp; Consume</text>
+
+      <!-- Row 2: Data type chips (y≈392) -->
+      <text x="144" y="393" text-anchor="start" font-family="'Geist Mono',monospace" font-size="6.5" font-weight="500" letter-spacing="0.12em" fill="#8A99AE">DATA TYPE</text>
+      <!-- WB -->
+      <rect x="204" y="387" width="16" height="8" rx="3" fill="#6e6479"/>
+      <text x="212" y="391" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">WB</text>
+      <text x="224" y="393" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Web / Public</text>
+      <!-- DB -->
+      <rect x="284" y="387" width="16" height="8" rx="3" fill="#5e7a9b"/>
+      <text x="292" y="391" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">DB</text>
+      <text x="304" y="393" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Dataset / Raw</text>
+      <!-- TB -->
+      <rect x="368" y="387" width="16" height="8" rx="3" fill="#b8915a"/>
+      <text x="376" y="391" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">TB</text>
+      <text x="388" y="393" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">Table / Analysis-ready</text>
+      <!-- FL -->
+      <rect x="468" y="387" width="16" height="8" rx="3" fill="#9c6b50"/>
+      <text x="476" y="391" text-anchor="middle" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="5" font-weight="700" fill="white">FL</text>
+      <text x="488" y="393" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">File / Report</text>
+
+      <!-- Row 3: Arrow type key (y≈414) -->
+      <text x="144" y="415" text-anchor="start" font-family="'Geist Mono',monospace" font-size="6.5" font-weight="500" letter-spacing="0.12em" fill="#8A99AE">FLOW</text>
+      <!-- solid muted — data flow -->
+      <line x1="188" y1="413" x2="208" y2="413" stroke="#5A6B82" stroke-width="1" marker-end="url(#arr-muted)"/>
+      <text x="212" y="415" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">data flow</text>
+      <!-- dashed — governance trigger -->
+      <line x1="264" y1="413" x2="284" y2="413" stroke="#5A6B82" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr-muted)"/>
+      <text x="288" y="415" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#5A6B82">governance trigger</text>
+      <!-- accent — anonymized handoff -->
+      <line x1="376" y1="413" x2="396" y2="413" stroke="#E63558" stroke-width="1.2" marker-end="url(#arr-accent)"/>
+      <text x="400" y="415" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#E63558">anonymized handoff</text>
+      <!-- link — published output -->
+      <line x1="492" y1="413" x2="512" y2="413" stroke="#167C7C" stroke-width="1" marker-end="url(#arr-link)"/>
+      <text x="516" y="415" text-anchor="start" dominant-baseline="middle" font-family="'Geist Mono',monospace" font-size="6.5" fill="#167C7C">published output</text>
+
+    </svg>
+  </div>
+
+  <!-- Info Cards -->
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-dot accent"></span>
+        <h3>Pipeline Roles</h3>
+      </div>
+      <ul>
+        <li><strong>ADM</strong> Data Admins create projects, assign LDAP group memberships, and set MinIO bucket policies before any data lands</li>
+        <li><strong>ENG</strong> Data Engineers own ingest — pulling from web APIs, databases, and SFTP — and transform raw files into staging tables</li>
+        <li><strong>SCI</strong> Data Scientists receive only anonymized, pre-approved data; they explore, model, and publish findings to Superset</li>
+        <li><strong>CON</strong> Data Consumers query aggregated, published views via Trino with read-only access — no direct pipeline or model access</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-dot ink"></span>
+        <h3>Data Types in Flight</h3>
+      </div>
+      <ul>
+        <li><strong>WB</strong> Web / Public — source APIs, government open-data portals, scraped public datasets entering the collect step</li>
+        <li><strong>DB</strong> Dataset / Raw — raw file landing zones in MinIO; schema-on-read, no cleaning applied</li>
+        <li><strong>TB</strong> Table / Analysis-ready — Trino-queryable Iceberg tables in staging and gold zones; typed, partitioned, documented</li>
+        <li><strong>FL</strong> File / Report — model outputs, serialised notebooks, and dashboard exports published by Scientists</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-dot muted"></span>
+        <h3>Access Boundaries</h3>
+      </div>
+      <ul>
+        <li>Anonymisation gate sits between Engineer clean-and-stage and the Scientist lane — no PII crosses that edge</li>
+        <li>Scientists never touch raw or staging zones; access is scoped to the anonymised gold bucket only</li>
+        <li>Consumers are bound to published views — no model internals, no intermediate tables, no raw paths</li>
+        <li>LDAP group policies enforced at MinIO bucket level on every zone; Trino row-level filters enforce the same boundary at query time</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>D4N Platform · Source to Insight · Role-Scoped Data Flow</span>
+    <span>2025</span>
+  </div>
+
+</div>
+</body>
+</html>

@@ -26,10 +26,28 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 
 MD_OUT = REPO / "skills" / "diagram-design" / "references" / "primitive-icons.md"
 HTML_OUT = REPO / "skills" / "diagram-design" / "assets" / "icons.html"
+VENDOR_DIR = REPO / "scripts" / "vendor" / "icons"
+
+
+def vendor_path(slot: str, source: str, source_id: str) -> pathlib.Path:
+    """Return the local cache path for a given icon."""
+    if source == "tabler":
+        return VENDOR_DIR / "tabler" / f"{source_id}.svg"
+    if source == "simple":
+        return VENDOR_DIR / "simple" / f"{source_id}.svg"
+    if source == "logz":
+        return VENDOR_DIR / "logz" / f"{source_id}.svg"
+    if source.startswith("devicon"):
+        variant = source.split(":")[1] if ":" in source else "plain"
+        return VENDOR_DIR / "devicon" / f"{source_id}-{variant}.svg"
+    # "url" source — key by slot name so the cache is human-readable
+    safe = re.sub(r"[^\w\-]", "_", slot)
+    return VENDOR_DIR / "url" / f"{safe}.svg"
 
 TABLER_URL = "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/outline/{name}.svg"
 TABLER_URL_FALLBACK = "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/{name}.svg"
 SI_URL = "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/{slug}.svg"
+SI_CDN_URL = "https://cdn.jsdelivr.net/npm/simple-icons/icons/{slug}.svg"
 LOGZ_URL = "https://raw.githubusercontent.com/log-z/logos/main/website-logos/{name}.svg"
 DEVICON_URL = "https://raw.githubusercontent.com/devicons/devicon/master/icons/{name}/{name}-{variant}.svg"
 # For "url" source: source_id is the full URL; blurb should note license
@@ -117,13 +135,23 @@ ICONS: dict[str, list[tuple[str, str, str, str]]] = {
         ("active-directory",  "tabler", "address-book",               "Active Directory / LDAP identity directory."),
         ("minio",      "simple", "minio",              "MinIO S3-compatible object storage."),
         ("mysql",      "logz",   "mysql",              "MySQL."),
+        ("oracle",     "simple", "oracle",             "Oracle Database."),
+        ("sqlserver",  "simple", "microsoftsqlserver", "Microsoft SQL Server."),
+        ("sqlite",     "simple", "sqlite",             "SQLite embedded database."),
+        ("hive",       "simple", "apachehive",         "Apache Hive data warehouse."),
         ("starrocks",  "logz",   "starrocks",          "StarRocks MPP analytical DB."),
     ],
     "Data stack": [
         ("nifi",      "simple", "apachenifi",      "Apache NiFi data flow."),
         ("airflow",   "simple", "apacheairflow",   "Apache Airflow scheduler / DAG runner."),
+        ("hop",     "url", "https://hop.apache.org/img/hop-logo.svg",                                                                                    "Apache Hop data orchestration / ETL."),
+        ("pentaho", "url", "https://cdn.worldvectorlogo.com/logos/pentaho-2.svg",                                                                          "Pentaho PDI (Kettle) ETL & data integration."),
+        ("dagster", "url", "https://cdn.prod.website-files.com/681399f654933b29e12fb8bd/6a04996c4dd28c8ad73bbf3d_Dagster%20Icon.svg", "Dagster data orchestration platform."),
         ("trino",     "simple", "trino",           "Trino distributed SQL query engine."),
         ("superset",  "simple", "apachesuperset",  "Apache Superset BI / dashboards."),
+        ("redash",    "simple", "redash",          "Redash open-source BI & dashboards."),
+        ("tableau",   "simple", "tableau",         "Tableau data visualization."),
+        ("powerbi",   "simple", "powerbi",         "Microsoft Power BI."),
         ("jupyter",   "simple", "jupyter",         "Jupyter / JupyterLab notebooks."),
     ],
     "Language": [
@@ -165,7 +193,7 @@ def fetch_tabler(name: str) -> str | None:
 
 
 def fetch_simple(slug: str) -> str | None:
-    return fetch(SI_URL.format(slug=slug))
+    return fetch(SI_URL.format(slug=slug)) or fetch(SI_CDN_URL.format(slug=slug))
 
 
 def fetch_logz(name: str) -> str | None:
@@ -323,33 +351,47 @@ def build() -> tuple[list[str], list[str]]:
         gallery_chunks.append(f'<section class="cat"><h2>{category}</h2><div class="grid">')
 
         for slot, source, source_id, blurb in items:
-            print(f"  fetching {source}/{source_id} -> {slot}", file=sys.stderr)
+            vpath = vendor_path(slot, source, source_id)
+
             if source == "tabler":
-                raw = fetch_tabler(source_id)
                 normalize = normalize_tabler
                 attribution = f"Tabler Icons / `{source_id}` (MIT)"
             elif source == "simple":
-                raw = fetch_simple(source_id)
                 normalize = normalize_simple
                 attribution = f"Simple Icons / `{source_id}` (CC0)"
             elif source == "logz":
-                raw = fetch_logz(source_id)
                 normalize = normalize_logz
                 attribution = f"log-z/logos / `{source_id}` (MIT)"
             elif source.startswith("devicon"):
-                # format: "devicon:<variant>" e.g. "devicon:plain" or "devicon:original"
                 variant = source.split(":")[1] if ":" in source else "plain"
-                raw = fetch_devicon(source_id, variant)
                 normalize = normalize_devicon
                 attribution = f"Devicon / `{source_id}-{variant}` (MIT)"
             elif source == "url":
-                # source_id is the full URL; fetch and normalize generically
-                raw = fetch_url(source_id)
                 normalize = normalize_url
                 domain = re.sub(r"https?://([^/]+)/.*", r"\1", source_id)
                 attribution = f"Direct fetch / `{domain}` — verify license before use"
             else:
                 raise ValueError(f"unknown source: {source}")
+
+            if vpath.exists():
+                print(f"  local   {source}/{source_id} -> {slot}", file=sys.stderr)
+                raw = vpath.read_text(encoding="utf-8")
+            else:
+                print(f"  fetching {source}/{source_id} -> {slot}", file=sys.stderr)
+                if source == "tabler":
+                    raw = fetch_tabler(source_id)
+                elif source == "simple":
+                    raw = fetch_simple(source_id)
+                elif source == "logz":
+                    raw = fetch_logz(source_id)
+                elif source.startswith("devicon"):
+                    variant = source.split(":")[1] if ":" in source else "plain"
+                    raw = fetch_devicon(source_id, variant)
+                elif source == "url":
+                    raw = fetch_url(source_id)
+                if raw is not None:
+                    vpath.parent.mkdir(parents=True, exist_ok=True)
+                    vpath.write_text(raw, encoding="utf-8")
 
             if raw is None:
                 misses.append(f"{slot} <- {source}/{source_id}")
