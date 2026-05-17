@@ -45,7 +45,7 @@ Tools that don't fetch remote fonts at import time (offline Illustrator, some Fi
 
 ## PNG export procedure
 
-Render **the original HTML** (not the extracted SVG) and screenshot only the `<svg>` element's bounding box. This keeps font loading reliable (already wired in the source HTML) while satisfying the "diagram only" rule.
+Render **the original HTML** (not the extracted SVG) and screenshot only the `<svg>` element's bounding box. This keeps font loading reliable (already wired in the source HTML) while satisfying the "diagram only" rule. The PNG always has a **transparent background** (`omit_background=True`) so it can be placed on any slide or doc colour without a white halo.
 
 ### Detection
 
@@ -82,7 +82,7 @@ with sync_playwright() as p:
     page = browser.new_page(device_scale_factor=scale)
     page.goto(f"file://{pathlib.Path(src).resolve()}")
     page.wait_for_load_state("networkidle")
-    page.locator("svg").first.screenshot(path=out, omit_background=False)
+    page.locator("svg").first.screenshot(path=out, omit_background=True)
     browser.close()
 ```
 

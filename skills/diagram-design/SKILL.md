@@ -89,9 +89,11 @@ Before drawing, ask: *Would the reader learn more from this than from a well-wri
 | Continuous trends over time | **Line chart** | [type-line.md](references/type-line.md) |
 | Tasks and phases on a timeline | **Gantt** | [type-gantt.md](references/type-gantt.md) |
 | Distribution and correlation between two variables | **Scatter plot** | [type-scatter.md](references/type-scatter.md) |
-| End-to-end data stack on a container cluster | **Data platform** | [type-data-platform.md](references/type-data-platform.md) |
+| End-to-end data stack on a container cluster | **High-Level** | [type-high-level.md](references/type-high-level.md) |
 | Multi-actor sequential process with data handoffs | **Process** | [type-process.md](references/type-process.md) |
 | Multi-tier data storage with quality levels and access policies | **Data org** | [type-data-org.md](references/type-data-org.md) |
+| Role-scoped data flow: who does what at each pipeline step | **Data flow** | [type-data-flow.md](references/type-data-flow.md) |
+| Integration topology of a data platform — sources → core → consumers | **DP integration** | [type-dp-integration.md](references/type-dp-integration.md) |
 
 Rules of thumb:
 - If a 3-column table communicates the same thing, pick the table.
@@ -118,6 +120,9 @@ These mark "AI slop" schematics of any type:
 | Shadow on any element | Shadows are out. Borders are in. |
 | `rounded-2xl` on boxes | Max radius 6–10px or none |
 | Coral on every "important" node | Coral is 1–2 editorial accents, not a signaling system |
+| Diagonal / slanted connectors between off-axis nodes | Rounded right-angle (orthogonal) elbows are mandatory — see §6 Mandatory connector rules |
+| Arrow label sitting on or touching its connector | Label must have a 6–10px gap above the line so the connector stays visible |
+| Two connectors overlapping or running on the same path | Each connection must be independently traceable — bridge crossings, offset parallels |
 
 Type-specific anti-patterns live in each `references/type-*.md`.
 
@@ -221,7 +226,17 @@ Don't use the dot pattern when the diagram sits inside a product page, slide, or
 | Link-blue | `#2e5aa8` | HTTP/API calls, external systems |
 | Dashed | `stroke-dasharray="5,4"` + any color | Optional, passive, return, async |
 
-**Draw arrows before boxes** so z-order puts lines behind nodes. For non-horizontal/vertical connections, use a 2-bend orthogonal elbow path (`r=8`) instead of a diagonal `<line>` — see `references/type-architecture.md` for the formula. Reserve straight `<line>` for connections that share an x or y axis.
+**Draw arrows before boxes** so z-order puts lines behind nodes.
+
+### Mandatory connector rules
+
+These three rules are **non-negotiable**. Run the pre-output checklist (§9) to verify before producing any diagram.
+
+1. **Rounded right-angle (orthogonal) connectors are mandatory.** Never use diagonal `<line>` or straight slanted paths between nodes that don't share an x or y axis. Every bend must be a quarter-arc with `r=8` (or `r=6` minimum for tight layouts). See `references/type-architecture.md` for the elbow-path formula. Reserve plain straight `<line>` only for connections whose endpoints share the same x or y coordinate. Diagonal connectors are an automatic fail.
+
+2. **Label-to-connector margin: 6–10px gap, always.** A label must never sit *on* its arrow — the connector must remain visible. Place the label centered above (or beside, for vertical segments) the line with a **minimum 6px gap** between the bottom of the label's mask rect and the connector stroke. The opaque mask rect prevents the arrow from bleeding through, but the *visible* gap between mask edge and line preserves the reader's ability to trace the connection. If the label is large enough that 6px feels cramped, push it to 8–10px. Never let the mask rect touch or overlap the stroke.
+
+3. **No overlapping connectors.** Two connectors must never share the same stroke path, run parallel on top of each other, or be drawn on top of each other for any segment. When two orthogonal arrows must cross at a single point, apply the **bridge / hop** primitive (see `references/type-architecture.md` § Crossing arrows). When two arrows naturally want to overlap, offset their routing by ≥12px so each line is independently traceable. If you find yourself stacking connectors, redesign the layout — it means two nodes are too close, or the diagram is over budget (split into overview + detail).
 
 ### Node box — full pattern
 
@@ -242,17 +257,22 @@ Don't use the dot pattern when the diagram sits inside a product page, slide, or
       font-family="'Geist Mono', monospace" text-anchor="middle">tech:port</text>
 ```
 
-### Arrow labels — always mask
+### Arrow labels — always mask, always with margin
 
-Every arrow label needs an opaque rect behind it. Without one it bleeds through the line.
+Every arrow label needs an opaque rect behind it. Without one it bleeds through the line. **And the label must sit with a visible gap above the connector — never on top of it.**
 
 ```svg
-<rect x="MID_X-18" y="ARROW_Y-12" width="36" height="12" rx="2" fill="#f5f5f5"/>
-<text x="MID_X" y="ARROW_Y-3" fill="#7a8399" font-size="8"
+<!-- Mask sits 14px above the arrow (8px text height + 6px gap). Stroke is at ARROW_Y. -->
+<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="#f5f5f5"/>
+<text x="MID_X" y="ARROW_Y-11" fill="#7a8399" font-size="8"
       font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">WRITE</text>
 ```
 
-Rules: ≤14 characters, all-caps, centered on segment midpoint, 8–10px above line. Never `writing-mode` vertical.
+Rules:
+- ≤14 characters, all-caps, centered on segment midpoint.
+- **Mandatory 6–10px gap** between the bottom of the mask rect and the arrow stroke. The connector must remain visible — a label that hides its own arrow is a hard fail.
+- Never `writing-mode` vertical.
+- For vertical segments, place the label to the side (not on the line) with the same 6–10px horizontal gap.
 
 ### Legend — horizontal strip at the bottom
 
@@ -371,6 +391,9 @@ Run before producing any diagram.
 
 **Technical:**
 - [ ] Arrows drawn before boxes?
+- [ ] **Every connector between off-axis nodes uses a rounded right-angle elbow (`r=8`)? No diagonal `<line>` slants?**
+- [ ] **Every arrow label has a visible 6–10px gap above its connector? (Mask rect not touching the stroke.)**
+- [ ] **No two connectors overlap, share a stroke path, or run on top of each other? Crossings use the bridge/hop primitive?**
 - [ ] Every arrow label has an opaque `fill="#f5f5f5"` rect behind it?
 - [ ] Legend is a horizontal bottom strip, not floating?
 - [ ] No vertical `writing-mode` text?

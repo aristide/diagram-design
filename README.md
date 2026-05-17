@@ -70,7 +70,7 @@ All 19 diagrams ship in three variants: minimal light, minimal dark, and full-ed
 
 ```bash
 # Clone the repo somewhere, then symlink the inner skill into Claude Code's skills dir
-git clone git@github.com:cathrynlavery/diagram-design.git ~/code/diagram-design
+git clone git@github.com:aristide/diagram-design.git ~/code/diagram-design
 ln -s ~/code/diagram-design/skills/diagram-design ~/.claude/skills/diagram-design
 ```
 

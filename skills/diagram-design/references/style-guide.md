@@ -16,24 +16,24 @@ Every token is referred to by **semantic role**, not by its hex value. Type refe
 
 | Role | Purpose | Default (light) | Default (dark) |
 |---|---|---|---|
-| `paper` | Page background, default node fill | `#f5f5f5` (white-smoke) | `#2d3142` (jet-black) |
-| `paper-2` | Diagram container bg, secondary fill | `#ececec` | `#393e53` |
-| `ink` | Primary text, primary stroke | `#2d3142` (jet-black) | `#f5f5f5` (white-smoke) |
-| `muted` | Secondary text, default arrow stroke | `#4f5d75` (blue-slate) | `#bfc0c0` (silver) |
-| `soft` | Sublabels, boundary labels | `#7a8399` | `#8e98ac` |
-| `rule` | Hairline borders | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
-| `rule-solid` | Stronger borders, baselines | `#bfc0c0` (silver) | `rgba(191,192,192,0.25)` |
-| `accent` | Focal / 1–2 max per diagram | `#eb6c36` (atomic-tangerine) | `#f08a59` |
-| `accent-tint` | Fill for accent-bordered boxes | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.10)` |
-| `link` | HTTP/API calls, external arrows | `#2e5aa8` | `#6a95d8` |
+| `paper` | Page background, default node fill | `#F4F6FA` (D4N paper) | `#0B1F38` (D4N ink) |
+| `paper-2` | Diagram container bg, secondary fill | `#E4E9F0` (D4N fog) | `#1a2e48` |
+| `ink` | Primary text, primary stroke | `#0B1F38` (D4N ink) | `#F4F6FA` (D4N paper) |
+| `muted` | Secondary text, default arrow stroke | `#5A6B82` (D4N slate) | `#8A99AE` (D4N steel) |
+| `soft` | Sublabels, boundary labels | `#8A99AE` (D4N steel) | `#C8D1DD` (D4N mist) |
+| `rule` | Hairline borders | `rgba(11,31,56,0.12)` | `rgba(244,246,250,0.12)` |
+| `rule-solid` | Stronger borders, baselines | `#C8D1DD` (D4N mist) | `rgba(200,209,221,0.25)` |
+| `accent` | Focal / 1–2 max per diagram | `#E63558` (D4N magenta) | `#EE5570` |
+| `accent-tint` | Fill for accent-bordered boxes | `rgba(230,53,88,0.07)` | `rgba(238,85,112,0.10)` |
+| `link` | HTTP/API calls, external arrows | `#167C7C` (D4N teal-deep) | `#1FA0A0` (D4N teal) |
 
-> **Brand palette source:** this skin maps to a five-color brand palette — `jet-black #2d3142`, `silver #bfc0c0`, `white-smoke #f5f5f5`, `atomic-tangerine #eb6c36`, `blue-slate #4f5d75`. The `soft`, `rule`, and `link` tokens are derived (lighter slate, ink-at-opacity, and a saturated variant in the blue-slate hue family) to cover roles the brand palette doesn't name directly.
+> **Brand palette source:** this skin is sourced from the **D4N (Data4Now) brand** — navy `#0F3D6E` (letterforms, headlines), teal `#1FA0A0` (secondary structure), teal-deep `#167C7C` (links/external), magenta `#E63558` (single focal accent), near-black `#0B1F38` (ink), and cool-paper `#F4F6FA` (background). Fonts: **Montserrat** display/labels, **Roboto** body/callouts, **JetBrains Mono** technical sublabels. Onboarded from `data4now-design` skill — `colors_and_type.css`.
 
-> **Note:** The pre-baked example HTML files in `assets/` were built under an earlier skin. Regenerating them against the current `style-guide.md` is a v5.1 task. New diagrams the skill produces will use the tokens above.
+> **Note:** The pre-baked example HTML files in `assets/` were built under an earlier skin (Geist/Instrument Serif). New diagrams the skill produces will use the current D4N tokens above (Montserrat/JetBrains Mono).
 
 ### Inversion rule (light → dark)
 
-Any `rgba(28,25,23, X)` in light becomes `rgba(250,247,242, X)` in dark. Same opacities, RGB flipped. The accent gets a slight hue-shift brighter to read on dark paper.
+Any `rgba(11,31,56, X)` in light becomes `rgba(244,246,250, X)` in dark. Same opacities, RGB flipped. The accent gets a slight hue-shift brighter to read on dark paper.
 
 ### Series palette (multi-series chart types only)
 
@@ -55,20 +55,20 @@ Fills sit at `0.18` opacity light, `0.22` dark; strokes use the full color. **Do
 
 | Role | Family | Size | Weight | Usage |
 |---|---|---|---|---|
-| `title` | Instrument Serif | 1.75rem | 400 | Page H1 |
-| `node-name` | Geist (sans) | 12px | 600 | Human-readable labels |
-| `sublabel` | Geist Mono | 9px | 400 | Port, protocol, URL, field type |
-| `eyebrow` | Geist Mono | 7–8px | 500, tracked 0.18em, uppercase | Type tags, axis labels |
-| `arrow-label` | Geist Mono | 8px | 400, tracked 0.06em | Arrow annotations |
-| `callout` | Instrument Serif *italic* | 14px | 400 | Editorial asides only |
+| `title` | Montserrat | 1.75rem | 700 | Page H1 |
+| `node-name` | Montserrat | 12px | 600 | Human-readable labels |
+| `sublabel` | JetBrains Mono | 9px | 400 | Port, protocol, URL, field type |
+| `eyebrow` | JetBrains Mono | 7–8px | 500, tracked 0.18em, uppercase | Type tags, axis labels |
+| `arrow-label` | JetBrains Mono | 8px | 400, tracked 0.06em | Arrow annotations |
+| `callout` | Roboto *italic* | 14px | 400 | Editorial asides only |
 
 ### Font stack
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 ```
 
-**Load-bearing rule:** Mono is for *technical* content (ports, commands, URLs, field types). Names go in Geist sans. Page title is Instrument Serif. Italic Instrument Serif is reserved for annotation callouts (see [primitive-annotation.md](primitive-annotation.md)). **Never JetBrains Mono** as a blanket "dev" font.
+**Load-bearing rule:** JetBrains Mono is for *technical* content (ports, commands, URLs, field types). Names go in Montserrat. Page title is Montserrat bold. Roboto italic is reserved for annotation callouts (see [primitive-annotation.md](primitive-annotation.md)).
 
 ---
 
